@@ -119,7 +119,7 @@ dependencies:
 #      path: packages/learning_language
   encrypt: ^5.0.1
   wakelock_plus: ^1.2.8
-  jinja: ^0.6.0
+  jinja: ^0.6.5
   image: ^4.1.3
   palette_generator: ^0.3.2
   getwidget: #^6.0.0
