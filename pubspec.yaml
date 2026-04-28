@@ -25,7 +25,7 @@ dependencies:
   dio: ^5.1.1
 
   cookie_jar: ^4.0.2
-  dio_cookie_manager: ^3.0.0
+  dio_cookie_manager: ^3.4.0
   webview_cookie_manager_plus:
     git:
       url: https://github.com/honjow/webview_cookie_manager_plus.git
