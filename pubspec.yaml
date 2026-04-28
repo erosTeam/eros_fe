@@ -206,7 +206,7 @@ dependencies:
   cupertino_battery_indicator: ^1.1.0
   mysql_client: ^0.0.27
   blurhash_ffi: ^1.2.2
-  cached_annotation: ^1.6.0
+  cached_annotation: ^1.8.1
   chinese_font_library: ^1.2.0
   path_provider: ^2.1.5
   path: ^1.9.1
