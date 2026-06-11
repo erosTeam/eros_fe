@@ -138,6 +138,10 @@ jobs:
       - name: Flutter version
         run: flutter --version
 
+      - name: Disable Swift Package Manager
+        if: matrix.target == 'ios' || matrix.target == 'macos'
+        run: flutter config --no-enable-swift-package-manager
+
       - name: Build resolve Swift dependencies
         if: matrix.target == 'macos'
         run: xcodebuild -resolvePackageDependencies -workspace ios/Runner.xcworkspace -scheme Runner -configuration Release
@@ -167,14 +171,27 @@ jobs:
       - name: Flutter pub get
         run: |
           git config --global core.longpaths true
-          flutter pub get && flutter pub upgrade
+          flutter pub get
           flutter pub run build_runner build --delete-conflicting-outputs
           flutter pub run intl_utils:generate
+
+      - name: Fix system_network_proxy desktop registrants
+        if: matrix.target == 'macos' || matrix.target == 'windows'
+        shell: bash
+        run: |
+          if [ "${{ matrix.target }}" = "macos" ]; then
+            sed -i.bak 's/none.register(with: registry.registrar(forPlugin: "none"))/SystemNetworkProxyMacosPlugin.register(with: registry.registrar(forPlugin: "SystemNetworkProxyMacosPlugin"))/' macos/Flutter/GeneratedPluginRegistrant.swift
+          fi
+          if [ "${{ matrix.target }}" = "windows" ]; then
+            sed -i.bak 's|#include <system_network_proxy_windows/none.h>|#include <system_network_proxy_windows/system_network_proxy_windows_plugin.h>|' windows/flutter/generated_plugin_registrant.cc
+            sed -i.bak 's/noneRegisterWithRegistrar/SystemNetworkProxyWindowsPluginRegisterWithRegistrar/' windows/flutter/generated_plugin_registrant.cc
+            sed -i.bak 's/GetRegistrarForPlugin("none")/GetRegistrarForPlugin("SystemNetworkProxyWindowsPlugin")/' windows/flutter/generated_plugin_registrant.cc
+          fi
 
       # 打包 apk
       - name: Collect Apks
         if: matrix.target == 'android'
-        run: flutter build apk --release
+        run: flutter build apk --release --no-pub
         env:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
@@ -187,7 +204,7 @@ jobs:
           sed -i '' 's/dev2.cn.honjow.fehv/cn.honjow.fehv/g' 'ios/Runner.xcodeproj/project.pbxproj'
           rm ios/Podfile.lock
           cd ios && pod update && pod install --repo-update && cd ..
-          flutter build ios --release --no-codesign
+          flutter build ios --release --no-codesign --no-pub
 
       # - name: upload-symbols
       #   if: matrix.target == 'ios'
@@ -210,7 +227,7 @@ jobs:
         if: matrix.target == 'macos'
         run: |
           cd macos && pod update && pod install && cd ..
-          flutter build macos --release
+          flutter build macos --release --no-pub
           APP_PATH=build/macos/Build/Products/Release/fehviewer.app
           cp -a $APP_PATH ./build
           cd build && zip -qroy macos/${{ env.PACKAGE_NAME }}_${{ env.app_version }}_macos.zip fehviewer.app
@@ -218,7 +235,7 @@ jobs:
       - name: Build windows
         if: matrix.target == 'windows'
         run: |
-          flutter build windows --release
+          flutter build windows --release --no-pub
           $DestDir = "build\windows\${{ env.PACKAGE_NAME }}"
           $SrcDir = "build\windows\x64\runner\Release"
           New-Item -Path $DestDir -ItemType Directory
