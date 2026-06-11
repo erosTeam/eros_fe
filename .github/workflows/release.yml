@@ -42,7 +42,7 @@ jobs:
             artifact_path: build/**/Eros-FE*.ipa
           - target: macos
             os: macos-15
-            flutter_version: "3.x"
+            flutter_version: "3.41.7"
             artifact_name: release-mac
             artifact_path: build/macos/Eros-FE*.zip
           - target: windows
