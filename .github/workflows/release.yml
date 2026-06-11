@@ -254,6 +254,9 @@ jobs:
     name: Publish releases
     needs: Build_and_upload
     runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
