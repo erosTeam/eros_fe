@@ -123,7 +123,7 @@ class _DownloadTabState extends State<DownloadTab> {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(FontAwesomeIcons.squareShareNodes)
+                  const FaIcon(FontAwesomeIcons.squareShareNodes)
                       .paddingOnly(right: 8),
                   const Text('Share '),
                 ],
@@ -137,7 +137,7 @@ class _DownloadTabState extends State<DownloadTab> {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(FontAwesomeIcons.fileArrowUp)
+                  const FaIcon(FontAwesomeIcons.fileArrowUp)
                       .paddingOnly(right: 8),
                   const Text('Export'),
                 ],
@@ -151,7 +151,7 @@ class _DownloadTabState extends State<DownloadTab> {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(FontAwesomeIcons.fileArrowDown)
+                  const FaIcon(FontAwesomeIcons.fileArrowDown)
                       .paddingOnly(right: 8),
                   const Text('Import'),
                 ],

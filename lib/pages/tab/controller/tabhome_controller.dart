@@ -32,7 +32,7 @@ class TabPages {
         EHRoutes.setting: const SettingTab(),
       };
 
-  final Map<String, IconData> iconDatas = <String, IconData>{
+  final Map<String, FaIconData> iconDatas = <String, FaIconData>{
     EHRoutes.popular: FontAwesomeIcons.fire,
     EHRoutes.watched: FontAwesomeIcons.solidEye,
     // EHRoutes.gallery: FontAwesomeIcons.jira,
@@ -47,7 +47,7 @@ class TabPages {
   };
 
   Map<String, Widget> get tabIcons => iconDatas
-      .map((key, value) => MapEntry(key, Icon(value, size: kIconSize)));
+      .map((key, value) => MapEntry(key, FaIcon(value, size: kIconSize)));
 
   BuildContext get _context => Get.find<TabHomeController>().tContext;
 

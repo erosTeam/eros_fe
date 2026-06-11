@@ -19,8 +19,7 @@ class SplashPage extends GetView<SplashController> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                const Icon(
-                  FontAwesomeIcons.cat,
+                const FaIcon(FontAwesomeIcons.cat,
                   // FontAwesomeIcons.heading,
                   size: 150.0,
                   color: Colors.grey,

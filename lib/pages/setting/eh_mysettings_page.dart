@@ -34,8 +34,7 @@ class EhMySettingsPage extends GetView<EhMySettingsController> {
                 CupertinoButton(
                   padding: const EdgeInsets.all(0),
                   minSize: 40,
-                  child: const Icon(
-                    FontAwesomeIcons.earthAmericas,
+                  child: const FaIcon(FontAwesomeIcons.earthAmericas,
                     size: 22,
                   ),
                   onPressed: () async {
@@ -45,8 +44,7 @@ class EhMySettingsPage extends GetView<EhMySettingsController> {
                 CupertinoButton(
                   padding: const EdgeInsets.all(0),
                   minSize: 40,
-                  child: const Icon(
-                    FontAwesomeIcons.circleCheck,
+                  child: const FaIcon(FontAwesomeIcons.circleCheck,
                     size: 22,
                   ),
                   onPressed: () async {
@@ -202,8 +200,7 @@ class _ListViewEhMySettingsState extends State<ListViewEhMySettings> {
               final String favTitle = controller.ehSetting.favMap['$e'] ?? '';
               // logger.d('favMap: $e $_title');
               return CupertinoTextInputListTile(
-                leading: Icon(
-                  FontAwesomeIcons.solidHeart,
+                leading: FaIcon(FontAwesomeIcons.solidHeart,
                   color: ThemeColors.favColor['$e'],
                 ),
                 // textAlign: TextAlign.left,

@@ -32,8 +32,7 @@ class EmptyPage extends StatelessWidget {
           child: SafeArea(
             child: Container(
               child: const Center(
-                child: Icon(
-                  FontAwesomeIcons.layerGroup,
+                child: FaIcon(FontAwesomeIcons.layerGroup,
                   size: 100,
                   color: CupertinoColors.inactiveGray,
                 ),

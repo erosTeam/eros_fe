@@ -84,8 +84,7 @@ class _HistoryTabState extends State<HistoryTab> {
           CupertinoButton(
             minSize: 40,
             padding: const EdgeInsets.all(0),
-            child: const Icon(
-              FontAwesomeIcons.solidTrashCan,
+            child: const FaIcon(FontAwesomeIcons.solidTrashCan,
               size: 20,
             ),
             onPressed: () {

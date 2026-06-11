@@ -31,7 +31,7 @@ Future<void> showTagInfoDialog(
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(FontAwesomeIcons.thumbsUp).paddingOnly(right: 8),
+              const FaIcon(FontAwesomeIcons.thumbsUp).paddingOnly(right: 8),
               if (showActionText) Text(L10n.of(Get.context!).tag_vote_up),
             ],
           ),
@@ -44,7 +44,7 @@ Future<void> showTagInfoDialog(
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(FontAwesomeIcons.thumbsDown).paddingOnly(right: 8),
+                const FaIcon(FontAwesomeIcons.thumbsDown).paddingOnly(right: 8),
                 if (showActionText) Text(L10n.of(Get.context!).tag_vote_down),
               ],
             ),
@@ -59,7 +59,7 @@ Future<void> showTagInfoDialog(
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(FontAwesomeIcons.arrowRotateLeft)
+              const FaIcon(FontAwesomeIcons.arrowRotateLeft)
                   .paddingOnly(right: 8),
               if (showActionText) Text(L10n.of(Get.context!).tag_withdraw_vote),
             ],
@@ -76,7 +76,7 @@ Future<void> showTagInfoDialog(
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(FontAwesomeIcons.arrowRotateLeft)
+              const FaIcon(FontAwesomeIcons.arrowRotateLeft)
                   .paddingOnly(right: 8),
               if (showActionText) Text(L10n.of(Get.context!).tag_withdraw_vote),
             ],
@@ -157,7 +157,7 @@ Future<void> showTagInfoDialog(
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(FontAwesomeIcons.tags).paddingOnly(right: 8),
+                  const FaIcon(FontAwesomeIcons.tags).paddingOnly(right: 8),
                   if (showActionText)
                     Text(L10n.of(Get.context!).tag_add_to_mytag),
                 ],

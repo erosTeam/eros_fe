@@ -43,8 +43,7 @@ class InWebMySetting extends StatelessWidget {
           children: <Widget>[
             CupertinoButton(
               padding: const EdgeInsets.all(0),
-              child: const Icon(
-                FontAwesomeIcons.rotateRight,
+              child: const FaIcon(FontAwesomeIcons.rotateRight,
                 size: 22,
               ),
               onPressed: () async {
@@ -53,8 +52,7 @@ class InWebMySetting extends StatelessWidget {
             ),
             CupertinoButton(
               padding: const EdgeInsets.all(0),
-              child: const Icon(
-                FontAwesomeIcons.circleCheck,
+              child: const FaIcon(FontAwesomeIcons.circleCheck,
                 size: 22,
               ),
               onPressed: () async {

@@ -143,7 +143,7 @@ class _NetworkExtendedImageState extends State<NetworkExtendedImage>
                       final showCustomWidget = snapshot.data ?? false;
                       return showCustomWidget
                           ? const Center(
-                              child: Icon(FontAwesomeIcons.rectangleAd))
+                              child: FaIcon(FontAwesomeIcons.rectangleAd))
                           : _image;
                     } else if (snapshot.connectionState ==
                         ConnectionState.waiting) {

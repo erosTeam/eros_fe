@@ -35,7 +35,7 @@ class LoginWebDAV extends GetView<WebdavController> {
               children: [
                 const Padding(
                   padding: EdgeInsets.only(top: 50, bottom: 30),
-                  child: Icon(
+                  child: FaIcon(
                     FontAwesomeIcons.cloud,
                     size: 120,
                     color: CupertinoColors.activeBlue,
@@ -85,14 +85,14 @@ class LoginWebDAV extends GetView<WebdavController> {
                       children: [
                         const Spacer(),
                         GestureDetector(
-                          child: const Icon(
+                          child: const FaIcon(
                             FontAwesomeIcons.clipboard,
                             size: 30,
                           ).paddingOnly(bottom: 30, right: 28, top: 8),
                           onTap: controller.readFromClipboard,
                         ),
                         GestureDetector(
-                          child: Icon(controller.obscurePasswd
+                          child: FaIcon(controller.obscurePasswd
                                   ? FontAwesomeIcons.eyeSlash
                                   : FontAwesomeIcons.eye)
                               .paddingOnly(bottom: 30, right: 28, top: 8),

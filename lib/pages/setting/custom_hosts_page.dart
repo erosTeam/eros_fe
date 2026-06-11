@@ -53,8 +53,7 @@ class CustomHostsPage extends StatelessWidget {
     return CupertinoButton(
         minSize: 40,
         padding: const EdgeInsets.only(right: 20),
-        child: const Icon(
-          FontAwesomeIcons.plusCircle,
+        child: const FaIcon(FontAwesomeIcons.plusCircle,
           size: 20,
         ),
         onPressed: () {

@@ -34,7 +34,7 @@ class LoginPage extends GetView<LoginController> {
               child: Column(
                 children: [
                   const SizedBox(height: 50),
-                  const Icon(
+                  const FaIcon(
                     FontAwesomeIcons.circleUser,
                     size: 120,
                     color: CupertinoColors.activeBlue,
@@ -50,7 +50,7 @@ class LoginPage extends GetView<LoginController> {
                         placeholderStyle: placeholderStyle,
                         prefix: Row(
                           children: [
-                            const Icon(
+                            const FaIcon(
                               FontAwesomeIcons.user,
                               size: 20,
                             ).paddingOnly(right: 12.0),
@@ -74,7 +74,7 @@ class LoginPage extends GetView<LoginController> {
                               children: [
                                 GestureDetector(
                                   onTap: logic.switchObscure,
-                                  child: Icon(
+                                  child: FaIcon(
                                     logic.obscurePasswd
                                         ? FontAwesomeIcons.eyeSlash
                                         : FontAwesomeIcons.eye,
@@ -123,7 +123,7 @@ class LoginPage extends GetView<LoginController> {
                           onPressed: controller.handOnWeblogin,
                           child: const Column(
                             children: [
-                              Icon(
+                              FaIcon(
                                 FontAwesomeIcons.earthAmericas,
                                 size: 30,
                               ),
@@ -139,7 +139,7 @@ class LoginPage extends GetView<LoginController> {
                         onPressed: controller.hanOnCookieLogin,
                         child: const Column(
                           children: [
-                            Icon(
+                            FaIcon(
                               FontAwesomeIcons.cookieBite,
                               size: 30,
                             ),

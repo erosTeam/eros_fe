@@ -413,8 +413,7 @@ class _TagSetListItemState extends State<TagSetListItem> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(
-              FontAwesomeIcons.tags,
+            const FaIcon(FontAwesomeIcons.tags,
               size: 18,
             ).paddingOnly(left: 8, right: 12, bottom: 2),
             Text(

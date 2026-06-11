@@ -92,7 +92,7 @@ class TorrentItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final LinkedHashMap<IconData, String?> trMap = LinkedHashMap.from(
+    final LinkedHashMap<FaIconData, String?> trMap = LinkedHashMap.from(
       {
         FontAwesomeIcons.circleArrowUp: torrent.seeds,
         FontAwesomeIcons.circleArrowDown: torrent.peerd,
@@ -111,7 +111,7 @@ class TorrentItem extends StatelessWidget {
                 .map(
                   (e) => Row(
                     children: [
-                      Icon(e.key,
+                      FaIcon(e.key,
                               size: 16,
                               color: CupertinoDynamicColor.resolve(
                                   CupertinoColors.secondaryLabel, context))
@@ -161,8 +161,7 @@ class TorrentItem extends StatelessWidget {
                 child: CupertinoButton(
                   padding: const EdgeInsets.only(left: 0),
                   minSize: 30,
-                  child: const Icon(
-                    FontAwesomeIcons.magnet,
+                  child: const FaIcon(FontAwesomeIcons.magnet,
                     size: 16,
                   ),
                   onPressed: () {

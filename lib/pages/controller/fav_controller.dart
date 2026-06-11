@@ -63,8 +63,7 @@ class FavController extends GetxController {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(right: 4, bottom: 4),
-                  child: Icon(
-                    FontAwesomeIcons.solidHeart,
+                  child: FaIcon(FontAwesomeIcons.solidHeart,
                     color: ThemeColors.favColor[e.favId],
                     size: 18,
                   ),

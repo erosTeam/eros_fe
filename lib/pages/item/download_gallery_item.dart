@@ -463,8 +463,7 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
         child: CupertinoButton(
           padding: buttonPadding,
           minSize: minSize,
-          child: const Icon(
-            FontAwesomeIcons.pause,
+          child: const FaIcon(FontAwesomeIcons.pause,
             size: iconSize,
           ),
           onPressed: () {
@@ -479,8 +478,7 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
         child: CupertinoButton(
           padding: buttonPadding,
           minSize: minSize,
-          child: const Icon(
-            FontAwesomeIcons.check,
+          child: const FaIcon(FontAwesomeIcons.check,
             size: iconSize,
           ),
           onPressed: () {},
@@ -493,8 +491,7 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
         child: CupertinoButton(
           padding: buttonPadding,
           minSize: minSize,
-          child: const Icon(
-            FontAwesomeIcons.play,
+          child: const FaIcon(FontAwesomeIcons.play,
             size: iconSize,
           ),
           onPressed: () {
@@ -506,8 +503,7 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
       TaskStatus.failed: CupertinoButton(
         padding: buttonPadding,
         minSize: minSize,
-        child: const Icon(
-          FontAwesomeIcons.play,
+        child: const FaIcon(FontAwesomeIcons.play,
           size: iconSize,
         ),
         onPressed: () {
@@ -518,8 +514,7 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
       TaskStatus.canceled: CupertinoButton(
         padding: buttonPadding,
         minSize: minSize,
-        child: const Icon(
-          FontAwesomeIcons.redo,
+        child: const FaIcon(FontAwesomeIcons.redo,
           size: iconSize,
         ),
         onPressed: () {

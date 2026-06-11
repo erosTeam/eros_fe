@@ -356,14 +356,14 @@ class _ListViewEhMyTagsState extends State<ListViewEhMyTags> {
   }) {
     return EhCupertinoListTile(
       title: Text(usertag.title),
-      leading: const Icon(FontAwesomeIcons.tag),
+      leading: const FaIcon(FontAwesomeIcons.tag),
       subtitle: isTagTranslat ? Text(usertag.translate ?? '') : null,
       onTap: () async => tapAddUserTagItem(usertag),
     );
   }
 
   Widget _buildHideIcon(bool? hide, bool? watch) {
-    late final IconData iconData;
+    late final FaIconData iconData;
     late final Color iconColor;
 
     if (watch ?? false) {
@@ -382,7 +382,7 @@ class _ListViewEhMyTagsState extends State<ListViewEhMyTags> {
 
     return Container(
       margin: const EdgeInsets.only(right: 10),
-      child: Icon(
+      child: FaIcon(
         iconData,
         size: 24,
         color: iconColor,

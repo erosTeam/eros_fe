@@ -34,8 +34,7 @@ class RateView extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 1.0),
                 child: Row(
                   children: const <Widget>[
-                    Icon(
-                      FontAwesomeIcons.solidStar,
+                    FaIcon(FontAwesomeIcons.solidStar,
                       color: Color(0xffFF962E),
                     ),
                     SizedBox(width: 3),

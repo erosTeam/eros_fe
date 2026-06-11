@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 const kDuration = Duration(milliseconds: 300);
 const double kDefIndicatorHeight = 4;
@@ -21,7 +22,7 @@ class LinkTabItem {
   });
 
   final String title;
-  final IconData? icon;
+  final Object? icon;
   final Color? iconColor;
   final List<LinkTabItemAction>? actinos;
 }
@@ -34,7 +35,7 @@ class LinkTabItemAction {
     this.color,
   });
   final String actinoText;
-  final IconData? icon;
+  final Object? icon;
   final VoidCallback? onTap;
   final Color? color;
 }
@@ -152,7 +153,7 @@ class _LinkScrollBarState extends State<LinkScrollBar> {
                                         Padding(
                                           padding: const EdgeInsets.only(
                                               right: 12.0),
-                                          child: Icon(
+                                          child: _buildLinkIcon(
                                             e.icon,
                                             size: 16,
                                             color: e.color ??
@@ -448,7 +449,7 @@ class InnerLinkTabItem extends StatefulWidget {
   final EdgeInsetsGeometry? padding;
   final bool selected;
   final int index;
-  final IconData? icon;
+  final Object? icon;
   final double iconSize;
 
   @override
@@ -504,7 +505,7 @@ class _InnerLinkTabItemState extends State<InnerLinkTabItem> {
           Row(
             children: [
               if (widget.icon != null)
-                Icon(
+                _buildLinkIcon(
                   widget.icon,
                   size: widget.iconSize,
                 ),
@@ -520,6 +521,17 @@ class _InnerLinkTabItemState extends State<InnerLinkTabItem> {
       ),
     );
   }
+}
+
+Widget _buildLinkIcon(
+  Object? icon, {
+  required double size,
+  Color? color,
+}) {
+  if (icon is FaIconData) {
+    return FaIcon(icon, size: size, color: color);
+  }
+  return Icon(icon as IconData?, size: size, color: color);
 }
 
 class WSLChannelScrollViewNeedScrollEvent {

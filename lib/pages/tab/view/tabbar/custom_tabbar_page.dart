@@ -406,8 +406,7 @@ class CustomTabBar extends StatelessWidget {
                               padding: const EdgeInsets.all(0),
                               child: isRefresh
                                   ? const CupertinoActivityIndicator(radius: 10)
-                                  : const Icon(
-                                      FontAwesomeIcons.rotateRight,
+                                  : const FaIcon(FontAwesomeIcons.rotateRight,
                                       size: 20,
                                     ),
                               onPressed: () async {
@@ -429,8 +428,7 @@ class CustomTabBar extends StatelessWidget {
                         minSize: 40,
                         padding: const EdgeInsets.all(0),
                         onPressed: controller.pressedBar,
-                        child: const Icon(
-                          FontAwesomeIcons.bars,
+                        child: const FaIcon(FontAwesomeIcons.bars,
                           size: 20,
                         ),
                       ),

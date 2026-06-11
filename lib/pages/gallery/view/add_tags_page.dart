@@ -81,8 +81,7 @@ class _AddTagPageState extends State<AddTagPage> {
                     return controller.showClearButton
                         ? GestureDetector(
                             onTap: controller.clear,
-                            child: Icon(
-                              FontAwesomeIcons.circleXmark,
+                            child: FaIcon(FontAwesomeIcons.circleXmark,
                               size: 16.0,
                               color: CupertinoDynamicColor.resolve(
                                   _kClearButtonColor, context),

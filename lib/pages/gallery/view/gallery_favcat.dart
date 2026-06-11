@@ -34,14 +34,12 @@ class GalleryFavButton extends StatelessWidget {
               ),
             ),
             if (_favController.isFav)
-              Icon(
-                FontAwesomeIcons.solidHeart,
+              FaIcon(FontAwesomeIcons.solidHeart,
                 color: ThemeColors.favColor[_favController.favcat],
                 size: iconSize,
               )
             else
-              const Icon(
-                FontAwesomeIcons.heart,
+              const FaIcon(FontAwesomeIcons.heart,
                 color: CupertinoColors.systemGrey,
                 size: iconSize,
               ),
@@ -117,8 +115,7 @@ class _FavCatAddListItemState extends State<FavCatAddListItem> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              FontAwesomeIcons.solidHeart,
+            FaIcon(FontAwesomeIcons.solidHeart,
               color: CupertinoDynamicColor.resolve(
                   ThemeColors.favColor[widget.favcat]!, context),
               size: 18,

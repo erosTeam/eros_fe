@@ -234,8 +234,7 @@ class _CommentPageState extends State<CommentPage>
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                 minSize: 0,
                 onPressed: controller.pressCancel,
-                child: const Icon(
-                  FontAwesomeIcons.xmark,
+                child: const FaIcon(FontAwesomeIcons.xmark,
                   // FontAwesomeIcons.solidCheckCircle,
                   size: 24,
                 ),
@@ -314,13 +313,11 @@ class _CommentPageState extends State<CommentPage>
                             //     scale: animation, child: child),
                             FadeTransition(opacity: animation, child: child),
                         child: controller.isEditStat || controller.isReptyStat
-                            ? Icon(
-                                FontAwesomeIcons.solidCircleCheck,
+                            ? FaIcon(FontAwesomeIcons.solidCircleCheck,
                                 key: UniqueKey(),
                                 size: 34,
                               )
-                            : Icon(
-                                FontAwesomeIcons.circleArrowUp,
+                            : FaIcon(FontAwesomeIcons.circleArrowUp,
                                 key: UniqueKey(),
                                 size: 34,
                               ),

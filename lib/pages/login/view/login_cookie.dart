@@ -33,8 +33,7 @@ class LoginCookie extends GetView<LoginController> {
               child: Column(
                 children: [
                   const SizedBox(height: 50),
-                  const Icon(
-                    FontAwesomeIcons.cookieBite,
+                  const FaIcon(FontAwesomeIcons.cookieBite,
                     size: 120,
                     color: CupertinoColors.activeBlue,
                   ),
@@ -91,8 +90,7 @@ class LoginCookie extends GetView<LoginController> {
                     onPressed: controller.readCookieFromClipboard,
                     child: Column(
                       children: [
-                        const Icon(
-                          FontAwesomeIcons.clipboard,
+                        const FaIcon(FontAwesomeIcons.clipboard,
                           size: 30,
                         ),
                         Text(L10n.of(context).read_from_clipboard,

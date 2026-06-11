@@ -29,8 +29,7 @@ class GalleryItemFlow extends StatelessWidget {
       return Container(
         child: galleryProviderController.isFav
             ? Container(
-                child: Icon(
-                  FontAwesomeIcons.solidHeart,
+                child: FaIcon(FontAwesomeIcons.solidHeart,
                   size: 12,
                   color: ThemeColors.favColor[
                       galleryProviderController.galleryProvider.favcat],

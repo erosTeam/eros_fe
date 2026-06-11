@@ -116,8 +116,7 @@ class SearchImagePage extends GetView<SearchImageController> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(
-                    FontAwesomeIcons.hippo,
+                  FaIcon(FontAwesomeIcons.hippo,
                     size: 100,
                     color: CupertinoDynamicColor.resolve(
                         CupertinoColors.systemGrey, context),
@@ -202,8 +201,7 @@ class ImagePersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
                 child: Obx(() {
                   return searchImageController.imagePath.isEmpty
                       ? Center(
-                          child: Icon(
-                            FontAwesomeIcons.circlePlus,
+                          child: FaIcon(FontAwesomeIcons.circlePlus,
                             // color: CupertinoColors.systemGrey2,
                             color:
                                 CupertinoTheme.of(context).barBackgroundColor,
@@ -233,8 +231,7 @@ class ImagePersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
                 margin: const EdgeInsets.only(right: 12),
                 // color: CupertinoColors.systemGrey3,
                 child: Center(
-                  child: Icon(
-                    FontAwesomeIcons.magnifyingGlass,
+                  child: FaIcon(FontAwesomeIcons.magnifyingGlass,
                     color: CupertinoTheme.of(context).barBackgroundColor,
                     size: 40,
                   ),

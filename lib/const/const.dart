@@ -500,7 +500,7 @@ class EHConst {
 
   static const emojiFontFamily = 'AppleEmoji';
 
-  static const List<IconData> fontAwesomeIconSicons = [
+  static const List<FaIconData> fontAwesomeIconSicons = [
     FontAwesomeIcons.solidHeart,
     FontAwesomeIcons.heart,
     FontAwesomeIcons.fireFlameCurved,

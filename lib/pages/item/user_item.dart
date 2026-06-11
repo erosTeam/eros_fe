@@ -59,8 +59,7 @@ class _UserItem extends State<UserItem> {
     }
 
     Widget _buildAvastat() {
-      const Widget _defAvatar = Icon(
-        FontAwesomeIcons.solidUserCircle,
+      const Widget _defAvatar = FaIcon(FontAwesomeIcons.solidUserCircle,
         size: 55.0,
         color: CupertinoColors.systemGrey,
       );
@@ -147,8 +146,7 @@ const double kNameTextSize = 13.0;
 
 class UserWidget extends GetView<UserController> {
   Widget _buildAvastat() {
-    const Widget _defAvatar = Icon(
-      FontAwesomeIcons.solidCircleUser,
+    const Widget _defAvatar = FaIcon(FontAwesomeIcons.solidCircleUser,
       size: kAvatarSize,
       color: CupertinoColors.systemGrey,
     );

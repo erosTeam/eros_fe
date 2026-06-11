@@ -357,8 +357,7 @@ class FavoriteTabBar extends StatelessWidget {
                                 child: isRefresh
                                     ? const CupertinoActivityIndicator(
                                         radius: 10)
-                                    : const Icon(
-                                        FontAwesomeIcons.rotateRight,
+                                    : const FaIcon(FontAwesomeIcons.rotateRight,
                                         size: 20,
                                       ),
                                 onPressed: () async {
@@ -380,8 +379,7 @@ class FavoriteTabBar extends StatelessWidget {
                           CupertinoButton(
                             minSize: 40,
                             padding: const EdgeInsets.all(0),
-                            child: const Icon(
-                              FontAwesomeIcons.bars,
+                            child: const FaIcon(FontAwesomeIcons.bars,
                               size: 20,
                             ),
                             onPressed: () async {

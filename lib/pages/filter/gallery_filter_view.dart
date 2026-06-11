@@ -179,8 +179,7 @@ class GalleryFilterView extends StatelessWidget {
                       //   L10n.of(context).clear_filter,
                       //   style: const TextStyle(height: 1, fontSize: 14),
                       // ),
-                      child: const Icon(
-                        FontAwesomeIcons.rotateLeft,
+                      child: const FaIcon(FontAwesomeIcons.rotateLeft,
                         size: 20,
                       ),
                       onPressed: () {

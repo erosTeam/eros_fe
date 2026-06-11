@@ -320,8 +320,7 @@ class TaskActionButton extends GetView<DownloadViewController> {
           child: !Platform.isIOS
               ? CupertinoButton(
                   padding: const EdgeInsets.all(0),
-                  child: const Icon(
-                    FontAwesomeIcons.pause,
+                  child: const FaIcon(FontAwesomeIcons.pause,
                     size: 18,
                   ),
                   onPressed: () {
@@ -330,8 +329,7 @@ class TaskActionButton extends GetView<DownloadViewController> {
                 )
               : CupertinoButton(
                   padding: const EdgeInsets.all(0),
-                  child: const Icon(
-                    FontAwesomeIcons.stop,
+                  child: const FaIcon(FontAwesomeIcons.stop,
                     size: 18,
                   ),
                   onPressed: () {
@@ -346,8 +344,7 @@ class TaskActionButton extends GetView<DownloadViewController> {
               primaryColor: CupertinoColors.activeGreen),
           child: CupertinoButton(
             padding: const EdgeInsets.all(0),
-            child: const Icon(
-              FontAwesomeIcons.check,
+            child: const FaIcon(FontAwesomeIcons.check,
               size: 18,
             ),
             onPressed: () {},
@@ -360,8 +357,7 @@ class TaskActionButton extends GetView<DownloadViewController> {
               primaryColor: CupertinoColors.activeBlue),
           child: CupertinoButton(
             padding: const EdgeInsets.all(0),
-            child: const Icon(
-              FontAwesomeIcons.play,
+            child: const FaIcon(FontAwesomeIcons.play,
               size: 18,
             ),
             onPressed: () {
@@ -376,8 +372,7 @@ class TaskActionButton extends GetView<DownloadViewController> {
               const CupertinoThemeData(primaryColor: CupertinoColors.systemRed),
           child: CupertinoButton(
             padding: const EdgeInsets.all(0),
-            child: const Icon(
-              FontAwesomeIcons.arrowRotateLeft,
+            child: const FaIcon(FontAwesomeIcons.arrowRotateLeft,
               size: 18,
             ),
             onPressed: () {
@@ -389,8 +384,7 @@ class TaskActionButton extends GetView<DownloadViewController> {
         // 取消状态 显示重试按钮。按下重试任务
         return CupertinoButton(
           padding: const EdgeInsets.all(0),
-          child: const Icon(
-            FontAwesomeIcons.arrowRotateLeft,
+          child: const FaIcon(FontAwesomeIcons.arrowRotateLeft,
             size: 18,
           ),
           onPressed: () {

@@ -200,8 +200,7 @@ class _GalleryInfoBarState extends State<GalleryInfoBar> {
                     ),
                     Row(
                       children: [
-                        Icon(
-                          FontAwesomeIcons.language,
+                        FaIcon(FontAwesomeIcons.language,
                           color: CupertinoDynamicColor.resolve(
                               CupertinoColors.secondaryLabel, context),
                           size: 13,
@@ -211,8 +210,7 @@ class _GalleryInfoBarState extends State<GalleryInfoBar> {
                           style: widget._hearTextStyle,
                         ),
                         const Spacer(),
-                        Icon(
-                          FontAwesomeIcons.images,
+                        FaIcon(FontAwesomeIcons.images,
                           size: 13,
                           color: CupertinoDynamicColor.resolve(
                               CupertinoColors.secondaryLabel, context),
@@ -233,8 +231,7 @@ class _GalleryInfoBarState extends State<GalleryInfoBar> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         // const Text('❤️', style: TextStyle(fontSize: 13)),
-                        const Icon(
-                          FontAwesomeIcons.solidHeart,
+                        const FaIcon(FontAwesomeIcons.solidHeart,
                           color: CupertinoColors.systemRed,
                           size: 13,
                         ),

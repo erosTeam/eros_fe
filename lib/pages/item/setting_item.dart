@@ -6,6 +6,7 @@ import 'package:eros_fe/route/second_observer.dart';
 import 'package:eros_fe/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 class SettingItems extends StatefulWidget {
@@ -18,7 +19,7 @@ class SettingItems extends StatefulWidget {
   });
 
   final String text;
-  final IconData icon;
+  final FaIconData icon;
   final String route;
   final bool topDivider;
   final bool bottomDivider;
@@ -66,7 +67,7 @@ class _SettingItems extends State<SettingItems> {
                   children: <Widget>[
                     Container(
 //                    padding: const EdgeInsets.fromLTRB(0, 8, 8, 8),
-                      child: Icon(
+                      child: FaIcon(
                         widget.icon,
                         size: 26.0,
                         color: CupertinoColors.systemGrey,

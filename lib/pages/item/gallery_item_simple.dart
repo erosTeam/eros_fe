@@ -250,8 +250,7 @@ class GalleryItemSimpleWidget extends StatelessWidget {
               false
           ? Container(
               padding: const EdgeInsets.only(bottom: 2.5, right: 8),
-              child: Icon(
-                FontAwesomeIcons.solidHeart,
+              child: FaIcon(FontAwesomeIcons.solidHeart,
                 size: 11,
                 color: ThemeColors
                     .favColor[galleryProviderController.galleryProvider.favcat],

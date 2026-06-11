@@ -2,6 +2,7 @@ import 'package:eros_fe/index.dart';
 import 'package:eros_fe/pages/setting/controller/tab_setting_controller.dart';
 import 'package:eros_fe/pages/tab/controller/tabhome_controller.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:reorderables/reorderables.dart';
 import 'package:sliver_tools/sliver_tools.dart';
@@ -60,7 +61,7 @@ class TabbarListView extends StatelessWidget {
       return EhCupertinoListTile(
         title: Text(tabPages.tabTitles[tag] ?? ''),
         key: ValueKey(tag),
-        leading: Icon(
+        leading: FaIcon(
           tabPages.iconDatas[tag],
           color: CupertinoDynamicColor.resolve(
               CupertinoColors.systemGrey, context),

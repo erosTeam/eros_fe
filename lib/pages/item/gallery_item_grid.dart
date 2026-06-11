@@ -164,8 +164,7 @@ class GalleryItemGrid extends StatelessWidget {
 
   Widget _buildFavCatIcon({bool blur = false}) {
     return Obx(() {
-      Widget icon = Icon(
-        FontAwesomeIcons.solidHeart,
+      Widget icon = FaIcon(FontAwesomeIcons.solidHeart,
         size: 12,
         color: ThemeColors
             .favColor[galleryProviderController.galleryProvider.favcat],

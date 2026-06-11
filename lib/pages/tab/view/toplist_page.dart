@@ -254,8 +254,7 @@ class _ToplistTabState extends State<ToplistTab> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(
-                  FontAwesomeIcons.hippo,
+                FaIcon(FontAwesomeIcons.hippo,
                   size: 100,
                   color: CupertinoDynamicColor.resolve(
                       CupertinoColors.systemGrey, context),

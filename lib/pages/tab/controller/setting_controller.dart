@@ -61,7 +61,7 @@ class SettingViewController extends GetxController
   // 菜单文案
   List<String> _itemTitles = <String>[];
 
-  List<IconData> _icons = <IconData>[];
+  List<FaIconData> _icons = <FaIconData>[];
 
   List<String> _routes = <String>[];
 
@@ -83,7 +83,7 @@ class SettingViewController extends GetxController
   Widget cupertinoListTileBuilder(int index) {
     return EhCupertinoListTile(
       title: Text(_itemTitles[index]),
-      leading: Icon(_icons[index], color: CupertinoColors.systemGrey),
+      leading: FaIcon(_icons[index], color: CupertinoColors.systemGrey),
       trailing: const CupertinoListTileChevron(),
       onTap: () {
         final route = _routes[index];
@@ -118,7 +118,7 @@ class SettingViewController extends GetxController
       L10n.of(context).about,
     ];
 
-    _icons = <IconData>[
+    _icons = <FaIconData>[
       FontAwesomeIcons.cookieBite,
       FontAwesomeIcons.layerGroup,
       FontAwesomeIcons.bookOpen,

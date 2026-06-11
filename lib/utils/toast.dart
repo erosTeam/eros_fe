@@ -71,7 +71,7 @@ void show509Toast() {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(
+              const FaIcon(
                 // LineIcons.toriiGate,
                 FontAwesomeIcons.fill,
                 size: 80,
@@ -112,7 +112,7 @@ void show429Toast() {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(
+              const FaIcon(
                 // LineIcons.toriiGate,
                 FontAwesomeIcons.roadBarrier,
                 size: 80,

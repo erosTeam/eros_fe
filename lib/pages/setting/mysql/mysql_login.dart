@@ -67,8 +67,7 @@ class _MysqlLoginState extends State<MysqlLogin> {
               children: [
                 const Padding(
                   padding: EdgeInsets.only(top: 50, bottom: 30),
-                  child: Icon(
-                    FontAwesomeIcons.database,
+                  child: FaIcon(FontAwesomeIcons.database,
                     size: 120,
                     color: CupertinoColors.activeBlue,
                   ),

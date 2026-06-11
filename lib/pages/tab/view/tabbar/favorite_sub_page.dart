@@ -131,8 +131,7 @@ class _FavoriteSubPageState extends State<FavoriteSubPage>
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(
-                    FontAwesomeIcons.hippo,
+                  FaIcon(FontAwesomeIcons.hippo,
                     size: 100,
                     color: CupertinoDynamicColor.resolve(
                         CupertinoColors.systemGrey, context),

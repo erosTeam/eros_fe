@@ -13,6 +13,7 @@ import 'package:eros_fe/pages/tab/controller/search_page_controller.dart';
 import 'package:eros_fe/pages/tab/controller/tabhome_controller.dart';
 import 'package:eros_fe/pages/tab/controller/toplist_controller.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 import '../comm.dart';
@@ -266,7 +267,7 @@ class DefaultTabViewController extends TabViewController {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  Icon(
+                  FaIcon(
                     tabPages.iconDatas[elem.key],
                     size: 20,
                   ),
@@ -308,7 +309,7 @@ class DefaultTabViewController extends TabViewController {
     final tabFlag = singleTabFlag;
 
     return CupertinoButton(
-        child: Icon(
+        child: FaIcon(
           tabPages.iconDatas[tabFlag],
           size: 20,
         ),

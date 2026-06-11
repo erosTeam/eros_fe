@@ -446,8 +446,7 @@ class _FavcatIcon extends StatelessWidget {
       child: favCat.isNotEmpty
           ? Container(
               padding: const EdgeInsets.only(bottom: 2, right: 2, left: 2),
-              child: Icon(
-                FontAwesomeIcons.solidHeart,
+              child: FaIcon(FontAwesomeIcons.solidHeart,
                 size: 12,
                 color: ThemeColors.favColor[favCat],
               ),

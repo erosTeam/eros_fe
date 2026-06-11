@@ -52,7 +52,7 @@ class _UserTagItemState extends State<UserTagItem> {
   }
 
   Widget icon() {
-    late final IconData iconData;
+    late final FaIconData iconData;
     late final Color iconColor;
     if (widget.watch) {
       iconColor =
@@ -70,7 +70,7 @@ class _UserTagItemState extends State<UserTagItem> {
 
     return Container(
       margin: const EdgeInsets.only(right: 10),
-      child: Icon(
+      child: FaIcon(
         iconData,
         size: 24,
         color: iconColor,
@@ -125,8 +125,8 @@ class _UserTagItemState extends State<UserTagItem> {
                   ),
                 if (widget.addItem)
                   Container(
-                    child:
-                        const Icon(FontAwesomeIcons.tag).paddingOnly(right: 12),
+                    child: const FaIcon(FontAwesomeIcons.tag)
+                        .paddingOnly(right: 12),
                   ),
                 Expanded(
                   child: Column(

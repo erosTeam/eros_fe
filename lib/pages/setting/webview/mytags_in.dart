@@ -25,8 +25,7 @@ class InWebMyTags extends StatelessWidget {
           children: <Widget>[
             CupertinoButton(
               padding: const EdgeInsets.all(0),
-              child: const Icon(
-                FontAwesomeIcons.rotateRight,
+              child: const FaIcon(FontAwesomeIcons.rotateRight,
                 size: 22,
               ),
               onPressed: () async {

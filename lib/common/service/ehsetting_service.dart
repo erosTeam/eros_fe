@@ -954,7 +954,7 @@ class EhSettingService extends ProfileService {
                 if (element == favoriteOrder.value)
                   const SizedBox(
                     width: 40,
-                    child: Icon(FontAwesomeIcons.circleCheck),
+                    child: FaIcon(FontAwesomeIcons.circleCheck),
                   ),
                 Text(_orderMap[element] ?? ''),
                 if (element == favoriteOrder.value)
@@ -1014,7 +1014,7 @@ class EhSettingService extends ProfileService {
                 if (element == toplist)
                   const SizedBox(
                     width: 40,
-                    child: Icon(FontAwesomeIcons.circleCheck),
+                    child: FaIcon(FontAwesomeIcons.circleCheck),
                   ),
                 Text(toplistTextMap[element] ?? ''),
                 if (element == toplist)

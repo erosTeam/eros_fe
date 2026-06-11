@@ -255,7 +255,7 @@ class _InfoWidget extends StatelessWidget {
     this.text,
   }) : super(key: key);
 
-  final IconData? icon;
+  final FaIconData? icon;
   final String? text;
 
   static const paddingRight = 5.0;
@@ -270,7 +270,7 @@ class _InfoWidget extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(
+        FaIcon(
           icon,
           color: CupertinoDynamicColor.resolve(
               CupertinoColors.secondaryLabel, context),
@@ -304,8 +304,7 @@ class GalleryInfoView extends StatelessWidget {
     Widget languageWidget() => Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              FontAwesomeIcons.language,
+            FaIcon(FontAwesomeIcons.language,
               color: CupertinoDynamicColor.resolve(
                   CupertinoColors.secondaryLabel, context),
               size: 12,
@@ -320,8 +319,7 @@ class GalleryInfoView extends StatelessWidget {
     Widget imageCountWidget() => Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              FontAwesomeIcons.solidImages,
+            FaIcon(FontAwesomeIcons.solidImages,
               size: 12,
               color: CupertinoDynamicColor.resolve(
                   CupertinoColors.secondaryLabel, context),
@@ -335,8 +333,7 @@ class GalleryInfoView extends StatelessWidget {
     Widget fileSizeWidget() => Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              FontAwesomeIcons.fileArrowDown,
+            FaIcon(FontAwesomeIcons.fileArrowDown,
               size: 12,
               color: CupertinoDynamicColor.resolve(
                   CupertinoColors.secondaryLabel, context),
@@ -350,8 +347,7 @@ class GalleryInfoView extends StatelessWidget {
     Widget favCountWidget() => Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              FontAwesomeIcons.solidHeart,
+            FaIcon(FontAwesomeIcons.solidHeart,
               // color: CupertinoColors.systemRed,
               color: CupertinoDynamicColor.resolve(
                   CupertinoColors.secondaryLabel, context),
@@ -364,8 +360,7 @@ class GalleryInfoView extends StatelessWidget {
     Widget rateCountWidget() => Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              FontAwesomeIcons.solidStar,
+            FaIcon(FontAwesomeIcons.solidStar,
               color: CupertinoDynamicColor.resolve(
                   CupertinoColors.secondaryLabel, context),
               size: 12,
@@ -377,8 +372,7 @@ class GalleryInfoView extends StatelessWidget {
     Widget potTimeWidget() => Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              FontAwesomeIcons.solidClock,
+            FaIcon(FontAwesomeIcons.solidClock,
               size: 12,
               color: CupertinoDynamicColor.resolve(
                   CupertinoColors.secondaryLabel, context),
