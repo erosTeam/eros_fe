@@ -41,8 +41,15 @@ class LogService extends GetxController {
 
     logPath = path.join(
         GetPlatform.isAndroid ? Global.extStorePath : Global.appDocPath, 'log');
-    if (!Directory(logPath).existsSync()) {
-      Directory(logPath).createSync(recursive: true);
+    try {
+      if (!Directory(logPath).existsSync()) {
+        Directory(logPath).createSync(recursive: true);
+      }
+    } catch (_) {
+      logPath = path.join(Global.appDocPath, 'log');
+      if (!Directory(logPath).existsSync()) {
+        Directory(logPath).createSync(recursive: true);
+      }
     }
 
     final DateTime _now = DateTime.now();

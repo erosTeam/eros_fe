@@ -137,8 +137,15 @@ void _initFile({String? directory, String? fileName}) {
   logDirectory = directory ??
       path.join(GetPlatform.isAndroid ? Global.extStorePath : Global.appDocPath,
           'log');
-  if (!Directory(logDirectory!).existsSync()) {
-    Directory(logDirectory!).createSync(recursive: true);
+  try {
+    if (!Directory(logDirectory!).existsSync()) {
+      Directory(logDirectory!).createSync(recursive: true);
+    }
+  } catch (_) {
+    logDirectory = path.join(Global.appDocPath, 'log');
+    if (!Directory(logDirectory!).existsSync()) {
+      Directory(logDirectory!).createSync(recursive: true);
+    }
   }
 
   final DateTime _now = DateTime.now();
