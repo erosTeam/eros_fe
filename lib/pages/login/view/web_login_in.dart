@@ -14,6 +14,8 @@ class WebLoginViewIn extends StatelessWidget {
 
   final CookieManager _cookieManager = CookieManager.instance();
 
+  static String? lastUserAgent;
+
   @override
   Widget build(BuildContext context) {
     final String title = L10n.of(context).login_web;
@@ -33,7 +35,22 @@ class WebLoginViewIn extends StatelessWidget {
         child: InAppWebView(
           initialUrlRequest: URLRequest(url: WebUri(EHConst.URL_SIGN_IN)),
           initialSettings: settings,
-          onWebViewCreated: (InAppWebViewController webViewController) {},
+          onWebViewCreated: (InAppWebViewController webViewController) async {
+            // 使用 WebView 真实的 UA，保证与 cf_clearance 绑定的 UA 一致
+            final String? ua = await webViewController
+                .evaluateJavascript(source: 'navigator.userAgent')
+                .then<String?>((value) => value
+                    ?.trim()
+                    .replaceAll(RegExp(r'^"|"$'), ''))
+                .catchError((Object e, StackTrace s) {
+              logger.e('getUserAgent error: $e\n$s');
+              return null;
+            });
+            if (ua != null && ua.isNotEmpty) {
+              WebLoginViewIn.lastUserAgent = ua;
+              logger.d('webview userAgent: $ua');
+            }
+          },
           onPermissionRequest: (controller, permissionRequest) async {
             return PermissionResponse(action: PermissionResponseAction.GRANT);
           },

@@ -17,6 +17,9 @@ class User {
     this.yay,
     this.star,
     this.iq,
+    this.cfClearance,
+    this.cfDuid,
+    this.userAgent,
     this.avatarUrl,
     this.favcat,
     this.lastUptTime,
@@ -32,6 +35,9 @@ class User {
   final String? yay;
   final String? star;
   final String? iq;
+  final String? cfClearance;
+  final String? cfDuid;
+  final String? userAgent;
   final String? avatarUrl;
   final List<Favcat>? favcat;
   final int? lastUptTime;
@@ -47,6 +53,9 @@ class User {
     yay: json['yay']?.toString(),
     star: json['star']?.toString(),
     iq: json['iq']?.toString(),
+    cfClearance: json['cfClearance']?.toString(),
+    cfDuid: json['cfDuid']?.toString(),
+    userAgent: json['userAgent']?.toString(),
     avatarUrl: json['avatarUrl']?.toString(),
     favcat: json['favcat'] != null ? (json['favcat'] as List? ?? []).map((e) => Favcat.fromJson(e as Map<String, dynamic>)).toList() : null,
     lastUptTime: json['lastUptTime'] != null ? int.tryParse('${json['lastUptTime']}') ?? 0 : null
@@ -63,6 +72,9 @@ class User {
     'yay': yay,
     'star': star,
     'iq': iq,
+    'cfClearance': cfClearance,
+    'cfDuid': cfDuid,
+    'userAgent': userAgent,
     'avatarUrl': avatarUrl,
     'favcat': favcat?.map((e) => e.toJson()).toList(),
     'lastUptTime': lastUptTime
@@ -79,6 +91,9 @@ class User {
     yay: yay,
     star: star,
     iq: iq,
+    cfClearance: cfClearance,
+    cfDuid: cfDuid,
+    userAgent: userAgent,
     avatarUrl: avatarUrl,
     favcat: favcat?.map((e) => e.clone()).toList(),
     lastUptTime: lastUptTime
@@ -96,6 +111,9 @@ class User {
     Optional<String?>? yay,
     Optional<String?>? star,
     Optional<String?>? iq,
+    Optional<String?>? cfClearance,
+    Optional<String?>? cfDuid,
+    Optional<String?>? userAgent,
     Optional<String?>? avatarUrl,
     Optional<List<Favcat>?>? favcat,
     Optional<int?>? lastUptTime
@@ -110,6 +128,9 @@ class User {
     yay: checkOptional(yay, () => this.yay),
     star: checkOptional(star, () => this.star),
     iq: checkOptional(iq, () => this.iq),
+    cfClearance: checkOptional(cfClearance, () => this.cfClearance),
+    cfDuid: checkOptional(cfDuid, () => this.cfDuid),
+    userAgent: checkOptional(userAgent, () => this.userAgent),
     avatarUrl: checkOptional(avatarUrl, () => this.avatarUrl),
     favcat: checkOptional(favcat, () => this.favcat),
     lastUptTime: checkOptional(lastUptTime, () => this.lastUptTime),
@@ -117,8 +138,8 @@ class User {
 
   @override
   bool operator ==(Object other) => identical(this, other)
-    || other is User && username == other.username && nickName == other.nickName && memberId == other.memberId && passHash == other.passHash && igneous == other.igneous && hathPerks == other.hathPerks && sk == other.sk && yay == other.yay && star == other.star && iq == other.iq && avatarUrl == other.avatarUrl && favcat == other.favcat && lastUptTime == other.lastUptTime;
+    || other is User && username == other.username && nickName == other.nickName && memberId == other.memberId && passHash == other.passHash && igneous == other.igneous && hathPerks == other.hathPerks && sk == other.sk && yay == other.yay && star == other.star && iq == other.iq && cfClearance == other.cfClearance && cfDuid == other.cfDuid && userAgent == other.userAgent && avatarUrl == other.avatarUrl && favcat == other.favcat && lastUptTime == other.lastUptTime;
 
   @override
-  int get hashCode => username.hashCode ^ nickName.hashCode ^ memberId.hashCode ^ passHash.hashCode ^ igneous.hashCode ^ hathPerks.hashCode ^ sk.hashCode ^ yay.hashCode ^ star.hashCode ^ iq.hashCode ^ avatarUrl.hashCode ^ favcat.hashCode ^ lastUptTime.hashCode;
+  int get hashCode => username.hashCode ^ nickName.hashCode ^ memberId.hashCode ^ passHash.hashCode ^ igneous.hashCode ^ hathPerks.hashCode ^ sk.hashCode ^ yay.hashCode ^ star.hashCode ^ iq.hashCode ^ cfClearance.hashCode ^ cfDuid.hashCode ^ userAgent.hashCode ^ avatarUrl.hashCode ^ favcat.hashCode ^ lastUptTime.hashCode;
 }
