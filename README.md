@@ -1,5 +1,5 @@
 # Eros-FE
-English | [简体中文](https://github.com/3003h/Eros-FE/blob/master/README_cn.md)
+English | [简体中文](https://github.com/erosTeam/eros_fe/blob/master/README_cn.md)
 
 ## Introduction
 
