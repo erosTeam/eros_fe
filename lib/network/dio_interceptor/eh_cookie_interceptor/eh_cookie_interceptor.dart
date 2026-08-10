@@ -10,6 +10,15 @@ class EhCookieInterceptor extends Interceptor {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     try {
+      final UserController userController = Get.find();
+      final user = userController.user.value;
+
+      // 使用 WebView 登陆时获得的 UA，保证 cf_clearance 有效
+      final userAgent = user.userAgent;
+      if (userAgent != null && userAgent.isNotEmpty) {
+        options.headers[HttpHeaders.userAgentHeader] = userAgent;
+      }
+
       final cookieHeader =
           options.headers[HttpHeaders.cookieHeader] as String? ?? '';
       final cookiesString = cookieHeader.isNotEmpty ? cookieHeader : 'nw=1';
@@ -96,6 +105,8 @@ class EhCookieInterceptor extends Interceptor {
     updateCookie(cookies, 'star', user.star);
     updateCookie(cookies, 'yay', user.yay);
     updateCookie(cookies, 'iq', user.iq);
+    updateCookie(cookies, 'cf_clearance', user.cfClearance);
+    updateCookie(cookies, 'cf_duid', user.cfDuid);
   }
 
   void updateCookie(List<Cookie> cookies, String name, String? value) {
@@ -124,6 +135,8 @@ class EhCookieInterceptor extends Interceptor {
       star: getCookiesValue(cookies, 'star')?.oN,
       yay: getCookiesValue(cookies, 'yay')?.oN,
       iq: getCookiesValue(cookies, 'iq')?.oN,
+      cfClearance: getCookiesValue(cookies, 'cf_clearance')?.oN,
+      cfDuid: getCookiesValue(cookies, 'cf_duid')?.oN,
     ));
 
     logger.t('user: ${userController.user.value.toJson()}');

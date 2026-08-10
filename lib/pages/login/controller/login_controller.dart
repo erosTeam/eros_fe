@@ -7,6 +7,7 @@ import 'package:eros_fe/index.dart';
 import 'package:eros_fe/network/api.dart';
 import 'package:eros_fe/network/request.dart';
 import 'package:eros_fe/pages/login/view/login_cookie.dart';
+import 'package:eros_fe/pages/login/view/web_login_in.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -155,6 +156,9 @@ class LoginController extends GetxController {
     );
     logger.d(' $cookies');
 
+    final webUserAgent = WebLoginViewIn.lastUserAgent;
+    WebLoginViewIn.lastUserAgent = null;
+
     if (cookies != null && cookies is List<Cookie>) {
       // final PersistCookieJar cookieJar = await Api.cookieJar;
 
@@ -179,6 +183,9 @@ class LoginController extends GetxController {
         igneous: _getCookiesValue(cookies, 'igneous')?.oN,
         hathPerks: _getCookiesValue(cookies, 'hath_perks')?.oN,
         sk: _getCookiesValue(cookies, 'sk')?.oN,
+        cfClearance: _getCookiesValue(cookies, 'cf_clearance')?.oN,
+        cfDuid: _getCookiesValue(cookies, 'cf_duid')?.oN,
+        userAgent: webUserAgent?.oN,
       );
 
       logger.d('>>>>>>>>>>>>>>>> user ${user.toJson()}');
