@@ -124,9 +124,9 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
             logger.t('^^^^ before read, dirPath: $dirPath');
 
             late final String parentPath;
-            if (dirPath.contains('/document/primary')) {
+            if (dirPath.contains('/document/')) {
               parentPath = dirPath.substring(
-                  0, dirPath.lastIndexOf('/document/primary'));
+                  0, dirPath.lastIndexOf('/document/'));
             } else {
               parentPath = dirPath.substring(0, dirPath.lastIndexOf('%2F'));
             }
