@@ -11,7 +11,7 @@ Please submit a pull request if you want to help with translation.
 App Strings: `lib/l10n/{lang}.arb`
 
 ## Installation for iOS
-1. Get the ipa file from [Releases](https://github.com/3003h/Eros-FE/releases/latest).
+1. Get the ipa file from [Releases](https://github.com/erosTeam/eros_fe/releases/latest).
 2. Use some software like [AltStore](https://altstore.io) to install the ipa file on your device. Or [AltStore.json](https://config-feh.vercel.app/AltStore.json)
 
 ## Descriptions
