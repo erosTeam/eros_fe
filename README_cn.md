@@ -6,7 +6,7 @@
 一个 flutter 编写的 e-hentai app
 
 ## iOS 安装
-1. 下载最新 ipa 文件 [Releases](https://github.com/3003h/Eros-FE/releases/latest).
+1. 下载最新 ipa 文件 [Releases](https://github.com/erosTeam/eros_fe/releases/latest).
 2. 使用 [AltStore](https://altstore.io) 之类的 app 安装到设备上. 或者直接使用 [AltStore.json](https://config-feh.vercel.app/AltStore.json)
 
 
