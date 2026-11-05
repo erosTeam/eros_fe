@@ -1,5 +1,5 @@
-import 'package:eros_fe/const/const.dart';
 import 'package:eros_fe/pages/tab/controller/tabhome_controller.dart';
+import 'package:eros_fe/widget/liquid_glass/liquid_glass_tab_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
@@ -11,18 +11,14 @@ class TabHomeSmall extends GetView<TabHomeController> {
 
     return Obx(() => CupertinoTabScaffold(
           controller: controller.tabController,
-          tabBar: CupertinoTabBar(
-            backgroundColor: kEnableImpeller
-                ? CupertinoTheme.of(context).barBackgroundColor.withOpacity(1)
-                : null,
+          // iOS 26 Liquid Glass 风格的悬浮标签栏，内容延伸到标签栏下方
+          tabBar: LiquidGlassTabBar(
             items: controller.listBottomNavigationBarItem,
             onTap: controller.onTap,
           ),
           tabBuilder: (BuildContext context, int index) {
-            // return controller.viewList[index];
             return CupertinoTabView(
               builder: (BuildContext context) {
-                // logger.d('build CupertinoTabView');
                 return controller.viewList[index];
               },
             );

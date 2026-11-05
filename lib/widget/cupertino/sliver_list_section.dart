@@ -40,17 +40,20 @@ const EdgeInsetsDirectional _kDefaultInsetGroupedRowsMarginWithHeader =
 // Used for iOS "Inset Grouped" border radius, estimated from SwiftUI's Forms in
 // iOS 14.2 SDK.
 // TODO(edrisian): This should be a rounded rectangle once that shape is added.
+// iOS 26 的分组列表使用更大的连续曲率圆角
+const double _kInsetGroupedRadius = 16.0;
+
 const BorderRadius _kDefaultInsetGroupedBorderRadius =
-    BorderRadius.all(Radius.circular(10.0));
+    BorderRadius.all(Radius.circular(_kInsetGroupedRadius));
 
 const BorderRadius _kDefaultTopInsetGroupedBorderRadius = BorderRadius.only(
-  topLeft: Radius.circular(10.0),
-  topRight: Radius.circular(10.0),
+  topLeft: Radius.circular(_kInsetGroupedRadius),
+  topRight: Radius.circular(_kInsetGroupedRadius),
 );
 
 const BorderRadius _kDefaultBottomInsetGroupedBorderRadius = BorderRadius.only(
-  bottomLeft: Radius.circular(10.0),
-  bottomRight: Radius.circular(10.0),
+  bottomLeft: Radius.circular(_kInsetGroupedRadius),
+  bottomRight: Radius.circular(_kInsetGroupedRadius),
 );
 
 // The margin of divider used in base list section. Estimated from iOS 14.4 SDK
@@ -378,7 +381,7 @@ class SliverCupertinoListSection extends StatelessWidget {
           }
         }();
 
-        childrenWithDividers.add(ClipRRect(
+        childrenWithDividers.add(ClipRSuperellipse(
           borderRadius: childrenGroupBorderRadius,
           child: children![i],
         ));
@@ -416,7 +419,7 @@ class SliverCupertinoListSection extends StatelessWidget {
                 }
               }();
 
-              widget = ClipRRect(
+              widget = ClipRSuperellipse(
                 borderRadius: childrenGroupBorderRadius,
                 child: itemBuilder!(context, itemIndex),
               );
