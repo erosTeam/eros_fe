@@ -446,5 +446,11 @@
   "page_view_type": "Page View Type",
   "slide_out_page": "Slide Out Page",
   "high_resolution_images_limited": "High Resolution Images Limited",
-  "refresh_igneous": "Refresh Igneous"
+  "refresh_igneous": "Refresh Igneous",
+  "cloudflare_verify": "Security Check",
+  "cloudflare_verify_tip": "Completing the Cloudflare check. This page closes automatically when done.",
+  "web_login_tip": "Sign in on the forum page. You will be returned automatically once signed in.",
+  "login_failed_try_web": "Sign in failed. E-Hentai now requires a security check, please sign in on the web.",
+  "login_success": "Signed in",
+  "fetch_user_info_failed": "Signed in, but the profile could not be loaded. It will be retried later."
 }

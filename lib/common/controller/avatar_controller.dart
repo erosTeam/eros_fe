@@ -34,7 +34,11 @@ class AvatarController extends GetxController {
     }
 
     logger.t('fetch new UserInfo $userId');
-    final user = await getUserInfo(userId, forceRefresh: true);
+    final user = await getUserInfo(
+      userId,
+      forceRefresh: true,
+      silentCloudflare: true,
+    );
     if (user != null) {
       _addUser(user.copyWith(
         memberId: userId.oN,

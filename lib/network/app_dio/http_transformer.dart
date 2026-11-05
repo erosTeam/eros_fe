@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:enum_to_string/enum_to_string.dart';
@@ -8,6 +7,7 @@ import 'package:eros_fe/component/exception/error.dart';
 import 'package:eros_fe/index.dart';
 import 'package:flutter/foundation.dart';
 
+import '../dio_interceptor/eh_cookie_interceptor/eh_cookie_interceptor.dart';
 import '../request.dart';
 import 'exception.dart';
 import 'http_response.dart';
@@ -347,33 +347,27 @@ class UserLoginTransformer extends HttpTransformer {
     final List<String> setcookie = response.headers['set-cookie'] ?? [];
     logger.d('setcookie: $setcookie');
 
-    late final List<Cookie> _cookies;
-    if (setcookie.length > 1) {
-      _cookies =
-          setcookie.map((str) => Cookie.fromSetCookieValue(str)).toList();
-    } else {
-      final List<String> _setcookie = setcookie[0]
-          .split(RegExp(r'[,;]'))
-          .where((element) => element.contains('='))
-          .toList();
-      _cookies =
-          _setcookie.map((str) => Cookie.fromSetCookieValue(str)).toList();
-    }
-    logger.d('_cookies: $_cookies');
+    // 兼容多个 Set-Cookie 被合并成一行的情况，忽略无法解析的 cookie
+    final Map<String, String> cookieMap =
+        EhCookieInterceptor.parseSetCookieHeaders(setcookie);
+    logger.d('cookieMap: $cookieMap');
 
-    final cookieStr =
-        _cookies.map((cookie) => '${cookie.name}=${cookie.value}').join('; ');
-
-    logger.d('cookieStr: $cookieStr');
-
-    final Map<String, String> cookieMap = <String, String>{};
-    for (final Cookie cookie in _cookies) {
-      cookieMap[cookie.name] = cookie.value;
+    final String? memberId = cookieMap['ipb_member_id'];
+    final String? passHash = cookieMap['ipb_pass_hash'];
+    if (memberId == null ||
+        memberId.isEmpty ||
+        memberId == '0' ||
+        passHash == null ||
+        passHash.isEmpty ||
+        passHash == '0') {
+      // 密码错误、需要验证码或被 Cloudflare 拦截时不会下发登录 cookie
+      return DioHttpResponse<User>.failureFromError(
+          UnauthorisedException(message: 'login failed', code: 401));
     }
 
     final User user = kDefUser.copyWith(
-      memberId: cookieMap['ipb_member_id']?.oN,
-      passHash: cookieMap['ipb_pass_hash']?.oN,
+      memberId: memberId.oN,
+      passHash: passHash.oN,
       igneous: cookieMap['igneous']?.oN,
       hathPerks: cookieMap['hath_perks']?.oN,
       sk: cookieMap['sk']?.oN,

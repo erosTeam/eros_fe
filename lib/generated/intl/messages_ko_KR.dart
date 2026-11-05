@@ -45,6 +45,12 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "cloudflare_verify": MessageLookupByLibrary.simpleMessage("보안 확인"),
+        "cloudflare_verify_tip": MessageLookupByLibrary.simpleMessage("Cloudflare 보안 확인 중입니다. 완료되면 자동으로 돌아갑니다"),
+        "web_login_tip": MessageLookupByLibrary.simpleMessage("포럼 페이지에서 로그인하세요. 로그인하면 자동으로 돌아갑니다"),
+        "login_failed_try_web": MessageLookupByLibrary.simpleMessage("로그인 실패. E-Hentai는 이제 보안 확인이 필요합니다. 웹 로그인을 사용하세요"),
+        "login_success": MessageLookupByLibrary.simpleMessage("로그인되었습니다"),
+        "fetch_user_info_failed": MessageLookupByLibrary.simpleMessage("로그인되었지만 프로필을 불러오지 못했습니다. 나중에 다시 시도합니다"),
         "KEEP_IT_SAFE": MessageLookupByLibrary.simpleMessage("안전하게 보관하세요!"),
         "QR_code_block": MessageLookupByLibrary.simpleMessage(
             "Block images containing QR codes"),

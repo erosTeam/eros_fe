@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:eros_fe/network/cloudflare/cloudflare.dart';
 import 'package:eros_fe/utils/logger.dart';
 
 import 'exception.dart';
@@ -83,6 +84,12 @@ HttpException _parseException(Exception error, {dynamic data}) {
     // if (error.error is SocketException) {
     //   return NetworkException(message: error.message);
     // }
+
+    if (error.error is CloudflareChallengeException) {
+      final cfError = error.error as CloudflareChallengeException;
+      return BadRequestException(
+          message: cfError.message, code: error.response?.statusCode);
+    }
 
     switch (error.type) {
       case DioExceptionType.connectionTimeout:

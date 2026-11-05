@@ -7,6 +7,7 @@ import 'package:eros_fe/common/controller/advance_search_controller.dart';
 import 'package:eros_fe/common/parser/eh_parser.dart';
 import 'package:eros_fe/component/exception/error.dart';
 import 'package:eros_fe/index.dart';
+import 'package:eros_fe/network/cloudflare/cloudflare.dart';
 import 'package:eros_fe/pages/gallery/controller/archiver_controller.dart';
 import 'package:eros_fe/pages/gallery/controller/torrent_controller.dart';
 import 'package:eros_fe/pages/tab/fetch_list.dart';
@@ -834,17 +835,33 @@ Future<User?> userLogin(String username, String passwd) async {
   }
 }
 
-Future<User?> getUserInfo(String userId, {bool forceRefresh = true}) async {
+/// [silentCloudflare] 为 true 时遇到 Cloudflare 质询不弹出验证页面（如评论头像等后台请求）
+Future<User?> getUserInfo(
+  String userId, {
+  bool forceRefresh = true,
+  bool silentCloudflare = false,
+}) async {
   const String url = 'https://forums.e-hentai.org/index.php';
 
   DioHttpClient dioHttpClient = DioHttpClient(dioConfig: globalDioConfig);
+
+  final Options options = getCacheOptions(refresh: forceRefresh);
+  options.headers = <String, dynamic>{
+    ...?options.headers,
+    'referer': 'https://forums.e-hentai.org/index.php',
+  };
+  if (silentCloudflare) {
+    options.extra = <String, dynamic>{
+      ...?options.extra,
+      CloudflareInterceptor.kSilentKey: true,
+    };
+  }
 
   DioHttpResponse httpResponse = await dioHttpClient.get(
     url,
     queryParameters: {'showuser': userId},
     httpTransformer: UserInfoPageTransformer(),
-    options: getCacheOptions(refresh: forceRefresh)
-      ..headers?['referer'] = 'https://forums.e-hentai.org/index.php',
+    options: options,
   );
 
   if (httpResponse.ok && httpResponse.data is User) {

@@ -446,5 +446,11 @@
   "page_view_type": "頁面檢視類型",
   "slide_out_page": "拖動返回",
   "high_resolution_images_limited": "高解析度圖片限制",
-  "refresh_igneous": "重新整理Igneous"
+  "refresh_igneous": "重新整理Igneous",
+  "cloudflare_verify": "安全驗證",
+  "cloudflare_verify_tip": "正在完成 Cloudflare 安全驗證，完成後將自動返回",
+  "web_login_tip": "請在論壇頁面中登入，登入成功後將自動返回",
+  "login_failed_try_web": "登入失敗。E-Hentai 現在需要安全驗證，請使用網頁登入",
+  "login_success": "登入成功",
+  "fetch_user_info_failed": "已登入，但取得使用者資料失敗，稍後會自動重試"
 }

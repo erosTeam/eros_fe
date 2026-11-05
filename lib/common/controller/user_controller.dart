@@ -6,6 +6,7 @@ import 'package:eros_fe/extension.dart';
 import 'package:eros_fe/generated/l10n.dart';
 import 'package:eros_fe/models/index.dart';
 import 'package:eros_fe/network/api.dart';
+import 'package:eros_fe/network/cloudflare/cloudflare.dart';
 import 'package:eros_fe/pages/tab/controller/favorite/favorite_tabbar_controller.dart';
 import 'package:eros_fe/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
@@ -25,6 +26,7 @@ class UserController extends ProfileController {
 
   void _logOut() {
     user(kDefUser);
+    CloudflareSolver.instance.clear();
     final WebviewCookieManager cookieManager = WebviewCookieManager();
     cookieManager.clearCookies();
   }

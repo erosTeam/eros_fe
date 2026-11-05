@@ -45,6 +45,12 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "cloudflare_verify": MessageLookupByLibrary.simpleMessage("安全验证"),
+        "cloudflare_verify_tip": MessageLookupByLibrary.simpleMessage("正在完成 Cloudflare 安全验证，完成后将自动返回"),
+        "web_login_tip": MessageLookupByLibrary.simpleMessage("请在论坛页面中登录，登录成功后将自动返回"),
+        "login_failed_try_web": MessageLookupByLibrary.simpleMessage("登录失败。E-Hentai 现在需要安全验证，请使用网页登录"),
+        "login_success": MessageLookupByLibrary.simpleMessage("登录成功"),
+        "fetch_user_info_failed": MessageLookupByLibrary.simpleMessage("已登录，但获取用户资料失败，稍后会自动重试"),
         "KEEP_IT_SAFE": MessageLookupByLibrary.simpleMessage("注意数据安全"),
         "QR_code_block": MessageLookupByLibrary.simpleMessage("屏蔽含有二维码的图片"),
         "about": MessageLookupByLibrary.simpleMessage("关于"),

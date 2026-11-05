@@ -12,6 +12,7 @@ import 'package:eros_fe/common/service/dns_service.dart';
 import 'package:eros_fe/common/service/ehsetting_service.dart';
 import 'package:eros_fe/const/const.dart';
 import 'package:eros_fe/network/app_dio/proxy.dart';
+import 'package:eros_fe/network/cloudflare/cloudflare.dart';
 import 'package:eros_fe/network/dio_interceptor/domain_fronting/domain_fronting.dart';
 import 'package:eros_fe/network/dio_interceptor/eh_cookie_interceptor/eh_cookie_interceptor.dart';
 import 'package:eros_fe/network/dio_interceptor/rate_limit/rate_limit_interceptor.dart';
@@ -46,14 +47,15 @@ class AppDio with DioMixin implements Dio {
     options ??= BaseOptions(
       baseUrl: dioConfig?.baseUrl ?? '',
       contentType: dioConfig?.contentType ?? Headers.formUrlEncodedContentType,
+      // DioHttpConfig 中的超时单位为毫秒
       connectTimeout: dioConfig?.connectTimeout != null
-          ? Duration(seconds: dioConfig!.connectTimeout)
+          ? Duration(milliseconds: dioConfig!.connectTimeout)
           : null,
       sendTimeout: dioConfig?.sendTimeout != null
-          ? Duration(seconds: dioConfig!.sendTimeout)
+          ? Duration(milliseconds: dioConfig!.sendTimeout)
           : null,
       receiveTimeout: dioConfig?.receiveTimeout != null
-          ? Duration(seconds: dioConfig!.receiveTimeout)
+          ? Duration(milliseconds: dioConfig!.receiveTimeout)
           : null,
       headers: <String, String>{
         'User-Agent': EHConst.CHROME_USER_AGENT,
@@ -85,6 +87,9 @@ class AppDio with DioMixin implements Dio {
     }
 
     interceptors.add(EhCookieInterceptor());
+
+    // Cloudflare 质询：弹出 WebView 验证后自动重试
+    interceptors.add(CloudflareInterceptor(this));
 
     // 限频 普通
     interceptors.add(RateLimitInterceptor(

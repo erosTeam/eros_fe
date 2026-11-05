@@ -446,5 +446,11 @@
   "page_view_type": "Page View Type",
   "slide_out_page": "Slide Out Page",
   "high_resolution_images_limited": "High Resolution Images Limited",
-  "refresh_igneous": "Refresh Igneous"
+  "refresh_igneous": "Refresh Igneous",
+  "cloudflare_verify": "セキュリティチェック",
+  "cloudflare_verify_tip": "Cloudflare のチェックを実行中です。完了すると自動的に戻ります",
+  "web_login_tip": "フォーラムのページでログインしてください。ログイン後に自動的に戻ります",
+  "login_failed_try_web": "ログインに失敗しました。E-Hentai はセキュリティチェックが必要です。Web でログインしてください",
+  "login_success": "ログインしました",
+  "fetch_user_info_failed": "ログインしましたが、プロフィールを取得できませんでした。後で再試行します"
 }

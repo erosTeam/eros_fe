@@ -45,6 +45,12 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "cloudflare_verify": MessageLookupByLibrary.simpleMessage("Security Check"),
+        "cloudflare_verify_tip": MessageLookupByLibrary.simpleMessage("Completing the Cloudflare check. This page closes automatically when done."),
+        "web_login_tip": MessageLookupByLibrary.simpleMessage("Sign in on the forum page. You will be returned automatically once signed in."),
+        "login_failed_try_web": MessageLookupByLibrary.simpleMessage("Sign in failed. E-Hentai now requires a security check, please sign in on the web."),
+        "login_success": MessageLookupByLibrary.simpleMessage("Signed in"),
+        "fetch_user_info_failed": MessageLookupByLibrary.simpleMessage("Signed in, but the profile could not be loaded. It will be retried later."),
         "KEEP_IT_SAFE": MessageLookupByLibrary.simpleMessage("KEEP IT SAFE"),
         "QR_code_block": MessageLookupByLibrary.simpleMessage(
             "Block images containing QR codes"),

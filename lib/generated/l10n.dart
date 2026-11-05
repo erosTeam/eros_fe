@@ -4543,6 +4543,66 @@ class L10n {
       args: [],
     );
   }
+
+  /// `Security Check`
+  String get cloudflare_verify {
+    return Intl.message(
+      'Security Check',
+      name: 'cloudflare_verify',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Completing the Cloudflare check. This page closes automatically when done.`
+  String get cloudflare_verify_tip {
+    return Intl.message(
+      'Completing the Cloudflare check. This page closes automatically when done.',
+      name: 'cloudflare_verify_tip',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sign in on the forum page. You will be returned automatically once signed in.`
+  String get web_login_tip {
+    return Intl.message(
+      'Sign in on the forum page. You will be returned automatically once signed in.',
+      name: 'web_login_tip',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sign in failed. E-Hentai now requires a security check, please sign in on the web.`
+  String get login_failed_try_web {
+    return Intl.message(
+      'Sign in failed. E-Hentai now requires a security check, please sign in on the web.',
+      name: 'login_failed_try_web',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Signed in`
+  String get login_success {
+    return Intl.message(
+      'Signed in',
+      name: 'login_success',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Signed in, but the profile could not be loaded. It will be retried later.`
+  String get fetch_user_info_failed {
+    return Intl.message(
+      'Signed in, but the profile could not be loaded. It will be retried later.',
+      name: 'fetch_user_info_failed',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {
