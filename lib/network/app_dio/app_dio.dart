@@ -47,13 +47,13 @@ class AppDio with DioMixin implements Dio {
       baseUrl: dioConfig?.baseUrl ?? '',
       contentType: dioConfig?.contentType ?? Headers.formUrlEncodedContentType,
       connectTimeout: dioConfig?.connectTimeout != null
-          ? Duration(seconds: dioConfig!.connectTimeout)
+          ? Duration(milliseconds: dioConfig!.connectTimeout)
           : null,
       sendTimeout: dioConfig?.sendTimeout != null
-          ? Duration(seconds: dioConfig!.sendTimeout)
+          ? Duration(milliseconds: dioConfig!.sendTimeout)
           : null,
       receiveTimeout: dioConfig?.receiveTimeout != null
-          ? Duration(seconds: dioConfig!.receiveTimeout)
+          ? Duration(milliseconds: dioConfig!.receiveTimeout)
           : null,
       headers: <String, String>{
         'User-Agent': EHConst.CHROME_USER_AGENT,

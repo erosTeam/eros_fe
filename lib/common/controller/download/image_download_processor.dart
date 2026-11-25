@@ -10,6 +10,7 @@ import 'package:eros_fe/index.dart';
 import 'package:eros_fe/network/api.dart';
 import 'package:eros_fe/network/request.dart';
 import 'package:eros_fe/store/db/entity/gallery_image_task.dart';
+import 'package:eros_fe/store/db/entity/gallery_task.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path/path.dart' as path;
 import 'package:shared_storage/shared_storage.dart' as ss;
@@ -65,12 +66,8 @@ class ImageDownloadProcessor {
       reDownload: reDownload,
       cancelToken: cancelToken,
       showKey: showKey,
-      updateShowKeyCallback: (gid, showKey, {updateDB}) {
-        dState.showKeyMap[gid] = showKey;
-        if (!(dState.showKeyCompleteMap[gid]?.isCompleted ?? false)) {
-          dState.showKeyCompleteMap[gid]?.complete(true);
-        }
-      },
+      updateShowKeyCallback: (gid, showKey, {updateDB}) =>
+          _updateShowKey(gid, showKey),
     );
 
     if (downloadInfo.updatedImage.sourceId?.isEmpty ?? true) {
@@ -79,8 +76,15 @@ class ImageDownloadProcessor {
     }
 
     // 定义下载进度回调
+    final String countKey = '${gid}_${preImage.ser}';
     void progressCallback(int count, int total) {
-      dState.downloadCounts['${gid}_${preImage.ser}'] = count;
+      final int prev = dState.downloadCounts[countKey] ?? 0;
+      // count 变小说明这张图重新开始下载了（如 403 换链接），此时增量就是 count
+      final int delta = count >= prev ? count - prev : count;
+      dState.downloadCounts[countKey] = count;
+      if (delta > 0) {
+        dState.receivedBytes[gid] = (dState.receivedBytes[gid] ?? 0) + delta;
+      }
     }
 
     try {
@@ -124,6 +128,9 @@ class ImageDownloadProcessor {
       } else {
         rethrow;
       }
+    } finally {
+      // 单张图片结束（成功或失败），清掉它的进度，重试时从 0 开始计
+      dState.downloadCounts.remove(countKey);
     }
   }
 
@@ -180,7 +187,9 @@ class ImageDownloadProcessor {
       // 根据重试次数决定是否使用sourceId
       String? sourceIdToUse;
       if (reDownload && shouldUseSourceId(gid, preImage.ser)) {
-        sourceIdToUse = imageTask?.sourceId;
+        // imageTask 是任务开始前从数据库读出的旧记录，新任务里通常为空，
+        // 所以优先使用本次下载过程中最近一次解析到的 sourceId
+        sourceIdToUse = _lastSourceId(gid, preImage.ser) ?? imageTask?.sourceId;
         logger.d('Reached retry limit, using source change: '
             'gid=$gid, ser=${preImage.ser}, sourceId=$sourceIdToUse');
       } else {
@@ -202,6 +211,8 @@ class ImageDownloadProcessor {
         sourceId: sourceIdToUse, // 使用计算后的sourceId
         showKey: showKey,
       );
+
+      _rememberSourceId(gid, preImage.ser, imageFetched.sourceId);
 
       if (imageFetched.imageUrl == null) {
         throw EhError(error: 'get imageUrl error');
@@ -273,7 +284,7 @@ class ImageDownloadProcessor {
     // 根据重试次数决定是否使用sourceId
     String? sourceIdToUse;
     if (shouldUseSourceId(gid, image.ser)) {
-      sourceIdToUse = sourceId;
+      sourceIdToUse = _lastSourceId(gid, image.ser) ?? sourceId;
       logger.d('Reached retry limit due to 403 error, using source change: '
           'gid=$gid, ser=${image.ser}, sourceId=$sourceIdToUse');
     } else {
@@ -293,13 +304,12 @@ class ImageDownloadProcessor {
       showKey: showKey,
     );
 
+    _rememberSourceId(gid, image.ser, imageFetched.sourceId);
+
     // 更新 showkey
     final resShowKey = imageFetched.showKey;
     if (resShowKey != null) {
-      dState.showKeyMap[gid] = resShowKey;
-      if (!(dState.showKeyCompleteMap[gid]?.isCompleted ?? false)) {
-        dState.showKeyCompleteMap[gid]?.complete(true);
-      }
+      _updateShowKey(gid, resShowKey);
     }
 
     final newImageUrl = downloadOrigImage
@@ -594,6 +604,30 @@ class ImageDownloadProcessor {
     return fileNameWithoutExtension;
   }
 
+  /// 更新 showKey，唤醒等待中的下载循环，并写回内存中的任务，
+  /// 让后续的状态更新把 showKey 持久化（App 重启后恢复下载时可直接使用）
+  void _updateShowKey(int gid, String showKey) {
+    dState.showKeyMap[gid] = showKey;
+    if (!(dState.showKeyCompleteMap[gid]?.isCompleted ?? false)) {
+      dState.showKeyCompleteMap[gid]?.complete(true);
+    }
+    final task = dState.galleryTaskMap[gid];
+    if (task != null && task.showKey != showKey) {
+      dState.galleryTaskMap[gid] = task.copyWith(showKey: showKey);
+    }
+  }
+
+  /// 最近一次解析到的换源 ID（页面里的 nl 参数），每次换源后都会更新，
+  /// 这样连续换源时每次都会换到不同的图片节点
+  String? _lastSourceId(int gid, int ser) =>
+      dState.imageSourceIds['${gid}_$ser'];
+
+  void _rememberSourceId(int gid, int ser, String? sourceId) {
+    if (sourceId != null && sourceId.isNotEmpty) {
+      dState.imageSourceIds['${gid}_$ser'] = sourceId;
+    }
+  }
+
   // ==================== 重试管理方法 ====================
 
   /// 获取重试次数
@@ -614,6 +648,7 @@ class ImageDownloadProcessor {
   void resetReDownloadCount(int gid, int ser) {
     final key = '${gid}_$ser';
     dState.reDownloadCounts.remove(key);
+    dState.imageSourceIds.remove(key);
     logger.t('Reset image retry count: gid=$gid, ser=$ser');
   }
 

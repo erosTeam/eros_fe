@@ -1,15 +1,8 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:collection/collection.dart';
 import 'package:eros_fe/common/controller/download_state.dart';
 import 'package:eros_fe/index.dart';
-
-// 下载状态检查相关常量
-const int kPeriodSeconds = 1;
-const int kMaxCount = 3;
-const int kCheckMaxCount = 10;
-const int kRetryThresholdTime = 3;
 
 class DownloadMonitor {
   DownloadMonitor(this.dState);
@@ -69,65 +62,51 @@ class DownloadMonitor {
 
   /// 计算并更新下载速度显示
   void updateDownloadSpeed(int gid, {int maxCount = 3, int periodSeconds = 1}) {
-    // 计算当前总下载量
-    final int totCurCount = dState.downloadCounts.entries
-        .where((element) => element.key.startsWith('${gid}_'))
-        .map((e) => e.value)
-        .sum;
+    // 使用累计接收字节数（只增不减），单张图片重试不会让总量回退
+    final int totCurCount = dState.receivedBytes[gid] ?? 0;
 
-    // 记录历史数据
-    dState.lastCounts.putIfAbsent(gid, () => [0]);
-    dState.lastCounts[gid]?.add(totCurCount);
-    final List<int> lastCounts = dState.lastCounts[gid] ?? [0];
+    // 记录历史数据，只保留计算所需的最近若干个采样
+    final List<int> lastCounts =
+        dState.lastCounts.putIfAbsent(gid, () => [totCurCount]);
+    lastCounts.add(totCurCount);
+    final int keep = max(maxCount, kCheckMaxCount) + 1;
+    if (lastCounts.length > keep) {
+      lastCounts.removeRange(0, lastCounts.length - keep);
+    }
 
-    // 计算用于显示的速度（使用较短时间窗口，更新及时）
-    final List<int> lastCountsTopShow = lastCounts.reversed
-        .toList()
-        .sublist(0, min(lastCounts.length, maxCount));
+    final speedShow = _speedOfWindow(lastCounts, maxCount, periodSeconds);
 
-    final speedShow = (max(totCurCount - lastCountsTopShow.reversed.first, 0) /
-            (lastCountsTopShow.length * periodSeconds))
-        .round();
-
-    logger.t(
-        'speedShow:${renderSize(speedShow)}\n${lastCountsTopShow.join(',')}');
+    logger.t('speedShow:${renderSize(speedShow)}');
 
     // 更新UI显示
     dState.downloadSpeeds[gid] = renderSize(speedShow);
   }
 
-  /// 检查下载是否停滞并触发回调
+  /// 计算最近 [window] 个周期内的平均速度（字节/秒）
+  int _speedOfWindow(List<int> samples, int window, int periodSeconds) {
+    if (samples.length < 2) {
+      return 0;
+    }
+    final int start = max(0, samples.length - 1 - window);
+    final int periods = samples.length - 1 - start;
+    final int delta = max(samples.last - samples[start], 0);
+    return (delta / (periods * periodSeconds)).round();
+  }
+
+  /// 检查下载是否停滞并触发回调（需在 [updateDownloadSpeed] 之后调用）
   void checkDownloadStall(
     int gid, {
     int checkMaxCount = 10,
     int periodSeconds = 1,
     Function? onRetryNeededCallback,
   }) {
-    // 获取当前总下载量
-    final int totCurCount = dState.downloadCounts.entries
-        .where((element) => element.key.startsWith('${gid}_'))
-        .map((e) => e.value)
-        .sum;
-
-    // 确保历史数据存在
-    dState.lastCounts.putIfAbsent(gid, () => [0]);
     final List<int> lastCounts = dState.lastCounts[gid] ?? [0];
 
     // 计算用于检查停滞的速度（使用较长时间窗口，更稳定）
-    final List<int> lastCountsTopCheck = lastCounts.reversed
-        .toList()
-        .sublist(0, min(lastCounts.length, checkMaxCount));
-
-    logger.t('检查下载停滞: ${lastCountsTopCheck.join(',')}');
-
-    // 计算监测速度
     final speedCheck =
-        (max(totCurCount - lastCountsTopCheck.reversed.first, 0) /
-                (lastCountsTopCheck.length * periodSeconds))
-            .round();
+        _speedOfWindow(lastCounts, checkMaxCount, periodSeconds);
 
-    logger.t(
-        'speedCheck:${renderSize(speedCheck)}\n${lastCountsTopCheck.join(',')}');
+    logger.t('speedCheck:${renderSize(speedCheck)}');
 
     // 处理停滞情况
     if (speedCheck == 0) {
