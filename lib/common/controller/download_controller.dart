@@ -29,8 +29,7 @@ import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 
 import 'cache_controller.dart';
-import 'download_state.dart'
-    hide kPeriodSeconds, kMaxCount, kCheckMaxCount, kRetryThresholdTime;
+import 'download_state.dart';
 
 Future<String> get defDownloadPath async => GetPlatform.isAndroid
     ? await getAndroidDefaultDownloadPath()
@@ -400,10 +399,14 @@ class DownloadController extends GetxController {
     // 清除下载缓存信息，确保重新开始不受旧状态影响
     dState.curComplete.clear();
     dState.lastCounts.clear();
+    dState.receivedBytes.clear();
+    dState.downloadCounts.clear();
     dState.noSpeed.clear();
     dState.downloadSpeeds.clear();
     dState.preComplete.clear();
     dState.reDownloadCounts.clear(); // 清理所有重试计数
+    dState.imageSourceIds.clear();
+    dState.quickRestartCounts.clear();
 
     // 保存数据库中的状态更改
     for (final gid in runningTaskGids) {
@@ -527,15 +530,15 @@ class DownloadController extends GetxController {
           // 更新下载速度显示
           downloadMonitor.updateDownloadSpeed(
             gid,
-            maxCount: dm.kMaxCount,
-            periodSeconds: dm.kPeriodSeconds,
+            maxCount: kMaxCount,
+            periodSeconds: kPeriodSeconds,
           );
 
           // 检查下载停滞状态
           downloadMonitor.checkDownloadStall(
             gid,
-            checkMaxCount: dm.kCheckMaxCount,
-            periodSeconds: dm.kPeriodSeconds,
+            checkMaxCount: kCheckMaxCount,
+            periodSeconds: kPeriodSeconds,
             onRetryNeededCallback: (int gid) {
               logger.d('检测到下载停滞，正在重试 gid:$gid, 时间:${DateTime.now()}');
 
@@ -729,6 +732,18 @@ class DownloadController extends GetxController {
 
     // 循环进行下载图片
     logger.d('开始循环下载: gid=${galleryTask.gid}, 文件总数=${galleryTask.fileCount}');
+    bool hasScheduledImage = false;
+    bool waitForShowKey = true;
+    // 本轮还没结束的图片任务数，初始 1 是调度循环自身的占位，循环结束时释放。
+    // 归零时说明本轮全部结束，如果还有没下完的图片就尽快补下
+    int pendingInRun = 1;
+    void releasePending() {
+      pendingInRun--;
+      if (pendingInRun <= 0) {
+        _onImageRunDrained(galleryTask.gid, cancelToken);
+      }
+    }
+
     for (int index = 0; index < galleryTask.fileCount; index++) {
       final itemSer = index + 1;
 
@@ -753,95 +768,213 @@ class DownloadController extends GetxController {
 
       final showKey = dState.showKeyMap[galleryTask.gid];
 
-      if (index > 0 && showKey == null) {
+      // 只有本轮已经调度过图片任务时，才有可能拿到 showKey；否则（例如前面的图片
+      // 都已完成被跳过）等待永远不会结束，任务会一直卡在 0 速度。
+      // showKey 为空时 fetchImageInfoByApi 会退回解析 html，所以超时后直接继续即可。
+      if (index > 0 && showKey == null && hasScheduledImage && waitForShowKey) {
         logger.d('等待showKey: gid=${galleryTask.gid}, index=$index');
         dState.showKeyCompleteMap[galleryTask.gid] = Completer<bool>.sync();
-        await dState.showKeyCompleteMap[galleryTask.gid]?.future;
+        final gotShowKey = await dState
+            .showKeyCompleteMap[galleryTask.gid]?.future
+            .timeout(kShowKeyWaitTimeout, onTimeout: () => false);
+        if (gotShowKey != true) {
+          logger.w('等待showKey超时，不再等待: gid=${galleryTask.gid}, index=$index');
+          waitForShowKey = false;
+        }
         logger.d(
             '获取到showKey: gid=${galleryTask.gid}, showKey=${dState.showKeyMap[galleryTask.gid]}');
       }
 
+      // 等待期间任务可能已被暂停/重试，旧的循环不应再继续调度
+      if (cancelToken.isCancelled) {
+        logger.d('任务已取消，停止调度: gid=${galleryTask.gid}, index=$index');
+        return;
+      }
+
+      hasScheduledImage = true;
+      pendingInRun++;
       dState.executor.scheduleTask(() async {
-        logger.d('开始处理图片任务: gid=${galleryTask.gid}, ser=$itemSer');
+        try {
+          await _downloadImageWithRetry(
+            galleryTask: galleryTask,
+            itemSer: itemSer,
+            oriImageTask: oriImageTask,
+            groupCount: groupCount!,
+            maxCompleteSer: maxCompleteSer,
+            downloadParentPath: downloadParentPath,
+            cancelToken: cancelToken,
+          );
+        } finally {
+          releasePending();
+        }
+      });
+    }
+    logger.d('所有图片任务已加入队列: gid=${galleryTask.gid}');
+    releasePending();
+  }
+
+  /// 下载单张图片，失败时就地重试并换源
+  Future<void> _downloadImageWithRetry({
+    required GalleryTask galleryTask,
+    required int itemSer,
+    required GalleryImageTask? oriImageTask,
+    required int groupCount,
+    required int maxCompleteSer,
+    required String downloadParentPath,
+    required CancelToken cancelToken,
+  }) async {
+    logger.d('开始处理图片任务: gid=${galleryTask.gid}, ser=$itemSer');
+    final int maxSer = galleryTask.fileCount + 1;
+    final bool firstReDownload = itemSer > 1 && itemSer < maxCompleteSer + 2;
+
+    // 单张图片失败时就地重试（退避等待），不再依赖整本画廊暂停/恢复
+    for (int attempt = 0;; attempt++) {
+      try {
         final GalleryImage? preImage =
             await imageProcessor.checkAndGetImageList(
           galleryTask.gid,
           itemSer,
           galleryTask.fileCount,
-          groupCount!,
+          groupCount,
           galleryTask.url,
           cancelToken: cancelToken,
           addAllImagesCallback: _addAllImages,
           getImageObjCallback: _getImageObj,
         );
 
-        if (preImage != null) {
-          logger.t(
-              '获取到图片信息: gid=${galleryTask.gid}, ser=$itemSer, imageUrl=${preImage.imageUrl}');
-          final int maxSer = galleryTask.fileCount + 1;
-
-          try {
-            logger.t('开始下载图片: gid=${galleryTask.gid}, ser=$itemSer');
-            await imageProcessor.downloadImageFlow(
-              preImage,
-              oriImageTask,
-              galleryTask.gid,
-              downloadParentPath,
-              maxSer,
-              showKey: dState.showKeyMap[galleryTask.gid],
-              downloadOrigImage: galleryTask.downloadOrigImage ?? false,
-              cancelToken: cancelToken,
-              reDownload: itemSer > 1 && itemSer < maxCompleteSer + 2,
-              onDownloadCompleteWithFileName: (String fileName) =>
-                  _onDownloadComplete(
-                fileName,
-                galleryTask.gid,
-                itemSer,
-              ),
-              putImageTaskCallback: _putImageTask,
-            );
-            logger.t('下载图片完成: gid=${galleryTask.gid}, ser=$itemSer');
-          } on DioException catch (e) {
-            // 忽略 [DioErrorType.cancel]
-            if (!CancelToken.isCancel(e)) {
-              logger.e(
-                  '下载图片Dio错误: gid=${galleryTask.gid}, ser=$itemSer, error=$e');
-              rethrow;
-            }
-            logger.t('下载图片取消: gid=${galleryTask.gid}, ser=$itemSer');
-          } on EhError catch (e) {
-            logger
-                .e('下载图片EH错误: gid=${galleryTask.gid}, ser=$itemSer, error=$e');
-            if (e.type == EhErrorType.image509) {
-              show509Toast();
-              _galleryTaskPausedAll();
-              dState.executor.close();
-              resetConcurrency();
-              _updateErrInfo(galleryTask.gid, '509');
-            }
-            rethrow;
-          } on HttpException catch (e) {
-            logger.e(
-                '下载图片HTTP错误: gid=${galleryTask.gid}, ser=$itemSer, error=$e');
-            if (e is BadRequestException && e.code == 429) {
-              show429Toast();
-              _galleryTaskPausedAll();
-              dState.executor.close();
-              resetConcurrency();
-              _updateErrInfo(galleryTask.gid, '429');
-            }
-            rethrow;
-          } catch (e) {
-            logger
-                .e('下载图片未知错误: gid=${galleryTask.gid}, ser=$itemSer, error=$e');
-            rethrow;
-          }
-        } else {
+        if (preImage == null) {
           logger.e('获取图片信息失败: gid=${galleryTask.gid}, ser=$itemSer');
+          return;
         }
-      });
+
+        logger.t(
+            '开始下载图片: gid=${galleryTask.gid}, ser=$itemSer, attempt=$attempt, imageUrl=${preImage.imageUrl}');
+        await imageProcessor.downloadImageFlow(
+          preImage,
+          oriImageTask,
+          galleryTask.gid,
+          downloadParentPath,
+          maxSer,
+          showKey: dState.showKeyMap[galleryTask.gid],
+          downloadOrigImage: galleryTask.downloadOrigImage ?? false,
+          cancelToken: cancelToken,
+          // 重试时强制重新解析图片地址，多次失败后会自动换源
+          reDownload: attempt > 0 || firstReDownload,
+          onDownloadCompleteWithFileName: (String fileName) =>
+              _onDownloadComplete(
+            fileName,
+            galleryTask.gid,
+            itemSer,
+          ),
+          putImageTaskCallback: _putImageTask,
+        );
+        logger.t('下载图片完成: gid=${galleryTask.gid}, ser=$itemSer');
+        return;
+      } catch (e) {
+        if (cancelToken.isCancelled ||
+            e is CancelException ||
+            (e is DioException && CancelToken.isCancel(e))) {
+          logger.t('下载图片取消: gid=${galleryTask.gid}, ser=$itemSer');
+          return;
+        }
+
+        // 单次失败只记警告，重试次数用尽时才记错误
+        logger.w(
+            '下载图片失败: gid=${galleryTask.gid}, ser=$itemSer, attempt=$attempt, error=$e');
+
+        if ((e is EhError && e.type == EhErrorType.image509) ||
+            e is Image509Exception) {
+          show509Toast();
+          _galleryTaskPausedAll();
+          dState.executor.close();
+          resetConcurrency();
+          _updateErrInfo(galleryTask.gid, '509');
+          rethrow;
+        }
+
+        if (e is BadRequestException && e.code == 429) {
+          show429Toast();
+          _galleryTaskPausedAll();
+          dState.executor.close();
+          resetConcurrency();
+          _updateErrInfo(galleryTask.gid, '429');
+          rethrow;
+        }
+
+        if (attempt >= kMaxImageRetries) {
+          logger.e(
+              '图片重试次数用尽: gid=${galleryTask.gid}, ser=$itemSer, attempts=${attempt + 1}, error=$e');
+          return;
+        }
+
+        // 图片节点连不上（握手失败、连接被重置、超时）时，等待没有意义，立即换源；
+        // 其他错误按 2、4、8、16 秒退避
+        final delay = _isNodeConnectionError(e)
+            ? kNodeErrorRetryDelay
+            : kImageRetryBaseDelay * (1 << attempt);
+        logger.w(
+            '${delay.inMilliseconds}ms 后重试: gid=${galleryTask.gid}, ser=$itemSer, attempt=${attempt + 1}/$kMaxImageRetries');
+        await Future<void>.delayed(delay);
+        if (cancelToken.isCancelled) {
+          return;
+        }
+      }
     }
-    logger.d('所有图片任务已加入队列: gid=${galleryTask.gid}');
+  }
+
+  /// 是否是图片节点层面的连接错误（换一个节点通常就能解决）
+  bool _isNodeConnectionError(Object e) {
+    if (e is DioException) {
+      switch (e.type) {
+        case DioExceptionType.connectionError:
+        case DioExceptionType.connectionTimeout:
+        case DioExceptionType.receiveTimeout:
+          return true;
+        default:
+          final inner = e.error;
+          return inner is SocketException ||
+              inner is TlsException ||
+              inner is TimeoutException;
+      }
+    }
+    return e is SocketException || e is TlsException || e is TimeoutException;
+  }
+
+  /// 本轮图片任务全部结束后调用：如果还有图片没下完，稍等片刻后重新开始本画廊，
+  /// 把失败的图片补下，而不是等停滞检测（约 40 秒无速度）兜底
+  void _onImageRunDrained(int gid, CancelToken cancelToken) {
+    if (cancelToken.isCancelled) {
+      return;
+    }
+    // 完成回调是异步写库的，稍等一下再判断是否真的有缺页
+    Future<void>.delayed(kQuickRestartDelay, () async {
+      if (cancelToken.isCancelled) {
+        return;
+      }
+      final task = dState.galleryTaskMap[gid];
+      if (task == null || task.status != TaskStatus.running.value) {
+        return;
+      }
+      final missing = task.fileCount - (task.completCount ?? 0);
+      if (missing <= 0) {
+        return;
+      }
+      final restarted = dState.quickRestartCounts[gid] ?? 0;
+      if (restarted >= kMaxQuickRestarts) {
+        // 换源也下不了的图片（常见于这些图片只存在于当前网络连不上的节点上，
+        // 换源只会在这几个节点之间来回切换），继续重试只会一直显示 0 速度。
+        // 暂停任务并显示缺页数，让出下载槽位，用户可稍后手动继续
+        logger.e('本轮结束仍缺 $missing 张，自动补下次数已用完，暂停任务: gid=$gid');
+        await galleryTaskPaused(gid);
+        _updateErrInfo(gid, '缺 $missing 张，节点连接失败');
+        return;
+      }
+      dState.quickRestartCounts[gid] = restarted + 1;
+      logger.w(
+          '本轮结束仍缺 $missing 张，立即补下(${restarted + 1}/$kMaxQuickRestarts): gid=$gid');
+      await galleryTaskPaused(gid, silent: true);
+      await galleryTaskResume(gid);
+    });
   }
 
   void _updateErrInfo(int gid, String error) {
